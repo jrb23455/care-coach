@@ -5,7 +5,7 @@ const NAV = [
   { label: 'Live Advice', page: 'live', live: true },
   { label: 'Training', page: 'training' },
   { label: 'Resources', page: 'help' },
-  { label: 'Progress', page: null },
+  { label: 'Progress', page: 'training' },
 ]
 
 function ShieldIcon() {

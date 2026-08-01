@@ -74,7 +74,7 @@ export default function Home({ setCurrentPage }) {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-base font-bold text-[#13105A]">Your Progress</h2>
-            <button className="text-sm text-[#6B4EF3] font-medium hover:underline">View all</button>
+            <button onClick={() => setCurrentPage('training')} className="text-sm text-[#6B4EF3] font-medium hover:underline">View all</button>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {PILLAR_META.map((m) => {
@@ -136,7 +136,7 @@ export default function Home({ setCurrentPage }) {
         <div className="max-w-7xl mx-auto">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-base font-bold text-[#13105A]">Recommended for You</h2>
-            <button className="text-sm text-[#6B4EF3] font-medium hover:underline">View all resources</button>
+            <button onClick={() => setCurrentPage('help')} className="text-sm text-[#6B4EF3] font-medium hover:underline">View all resources</button>
           </div>
           <div className="grid grid-cols-4 gap-4">
             {recommended.map((r, i) => (
