@@ -123,8 +123,11 @@ export default function Home({ setCurrentPage }) {
                 {totalDone === 0 ? 'Start with Understand: 5 scenarios' : totalDone < totalScenarios ? 'Pick up where you left off' : 'Try replaying for a higher score'}
               </p>
             </div>
-            <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors shrink-0 ml-4">
-              <span className="text-white text-lg">→</span>
+            <div className="flex items-center gap-3 shrink-0 ml-4">
+              <CoraRobot size={80} pose="thumbs" shadow={false} />
+              <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center group-hover:bg-white/30 transition-colors">
+                <span className="text-white text-lg">→</span>
+              </div>
             </div>
           </div>
 
@@ -158,7 +161,7 @@ export default function Home({ setCurrentPage }) {
           {/* Cora card */}
           <div className="bg-[#0B0934] rounded-2xl overflow-hidden shadow-lg">
             <div className="flex justify-center pt-5 pb-2">
-              <CoraRobot size={100} />
+              <CoraRobot size={100} pose="think" />
             </div>
             <div className="px-4 pb-4">
               <div className="text-[10px] font-bold text-[#6B4EF3] uppercase tracking-widest mb-2">Cora's Tip</div>

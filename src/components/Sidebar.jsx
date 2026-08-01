@@ -56,12 +56,7 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
           onClick={() => setCurrentPage('home')}
           className="flex items-center gap-2.5 group"
         >
-          <div className="w-8 h-8 bg-[#6B4EF3] rounded-lg flex items-center justify-center shrink-0">
-            <svg width="16" height="16" viewBox="0 0 30 30" fill="none">
-              <path d="M15 2L27 6.5V17C27 23 21.5 27.5 15 29.5C8.5 27.5 3 23 3 17V6.5Z" fill="white" opacity="0.9"/>
-              <circle cx="15" cy="15" r="4" fill="none" stroke="#0B0934" strokeWidth="1.8"/>
-            </svg>
-          </div>
+          <CoraRobot pose="wink" size={34} shadow={false} className="shrink-0 rounded-lg" />
           <div>
             <div className="text-white font-bold text-sm leading-none">CARE Coach</div>
             <div className="text-[#6B4EF3] text-[10px] font-semibold mt-0.5">by Allstate</div>

@@ -530,7 +530,7 @@ export default function HelpCenter() {
             <div className="absolute -top-4 right-0 bg-white rounded-2xl rounded-br-none shadow-md px-4 py-3 max-w-[200px]">
               <p className="text-xs text-[#13105A]">Ask me anything about handling difficult customers in insurance sales.</p>
             </div>
-            <CoraRobot size={170} />
+            <CoraRobot size={170} pose="present" />
           </div>
         </div>
 
@@ -607,7 +607,7 @@ export default function HelpCenter() {
           <div className="flex flex-col">
             {/* Robot sits right above chat */}
             <div className="bg-gradient-to-b from-[#EAE7FF] to-[#D8D2FF] rounded-t-2xl pt-5 pb-0 flex flex-col items-center border border-b-0 border-[#C9C0FF]/50">
-              <CoraRobot size={110} />
+              <CoraRobot size={110} pose="arms" />
             </div>
 
           {/* Chat with Cora */}

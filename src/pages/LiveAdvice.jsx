@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { getApiKey, setApiKey, clearApiKey, askCora } from '../services/claudeApi'
+import CoraRobot from '../components/CoraRobot'
 
 const QUICK_SITUATIONS = [
   { label: '😤 Getting angry / yelling', prompt: 'The customer is getting angry and starting to raise their voice at me.' },
@@ -108,8 +109,8 @@ function ApiKeySetup({ onSave }) {
     <div className="flex-1 flex items-center justify-center bg-[#F8F7FF] px-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-[#6B4EF3] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-[#6B4EF3]/30">
-            🧠
+          <div className="flex justify-center mb-4">
+            <CoraRobot size={120} pose="present" />
           </div>
           <h1 className="text-2xl font-bold text-[#13105A] mb-2">Connect Cora's Brain</h1>
           <p className="text-gray-500 text-sm leading-relaxed">
@@ -263,9 +264,9 @@ export default function LiveAdvice() {
         <div className="max-w-4xl mx-auto">
 
           {messages.length === 0 && !isLoading && (
-            <div className="text-center py-16">
-              <div className="w-20 h-20 bg-[#6B4EF3]/10 rounded-full flex items-center justify-center text-4xl mx-auto mb-5">
-                🤖
+            <div className="text-center py-12">
+              <div className="flex justify-center mb-5">
+                <CoraRobot size={130} pose="thumbs" />
               </div>
               <h2 className="text-lg font-bold text-[#13105A] mb-2">Ready to coach</h2>
               <p className="text-sm text-gray-400 max-w-sm mx-auto leading-relaxed">

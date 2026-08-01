@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react'
 import { practiceScenarios } from '../data/practiceScenarios'
 import { useProgress } from '../hooks/useProgress'
 import ProgressRing from '../components/ProgressRing'
+import CoraRobot from '../components/CoraRobot'
 
 const PILLAR_LABELS = {
   understand: 'Understand',
@@ -301,9 +302,12 @@ export default function Training() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       {/* top bar */}
       <div className="flex items-center justify-between mb-6">
-        <div>
-          <h1 className="text-2xl font-black text-gray-900">Training Center</h1>
-          <p className="text-gray-500 text-sm mt-0.5">Practice real customer scenarios with scored feedback</p>
+        <div className="flex items-center gap-4">
+          <CoraRobot size={64} pose="think" />
+          <div>
+            <h1 className="text-2xl font-black text-gray-900">Training Center</h1>
+            <p className="text-gray-500 text-sm mt-0.5">Practice real customer scenarios with scored feedback</p>
+          </div>
         </div>
         <div className="text-right">
           <div className="text-xs text-gray-500 font-medium">Level {xpLevel}</div>
