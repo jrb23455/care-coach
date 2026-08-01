@@ -22,7 +22,7 @@ export default function TopBar({ currentPage }) {
       <div className="ml-auto flex items-center gap-3 text-xs text-gray-400">
         <span>CARE Coach v1.0</span>
         <span className="text-gray-200">|</span>
-        <span>Allstate Insurance</span>
+        <span>Insurance Sales Coaching</span>
       </div>
     </div>
   )

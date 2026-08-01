@@ -59,7 +59,7 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
           <CoraRobot pose="wink" size={34} shadow={false} className="shrink-0 rounded-lg" />
           <div>
             <div className="text-white font-bold text-sm leading-none">CARE Coach</div>
-            <div className="text-[#6B4EF3] text-[10px] font-semibold mt-0.5">by Allstate</div>
+            <div className="text-[#6B4EF3] text-[10px] font-semibold mt-0.5">AI Call Coach</div>
           </div>
         </button>
       </div>
@@ -124,7 +124,7 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
         <div className="w-8 h-8 rounded-full bg-[#6B4EF3] flex items-center justify-center text-xs font-bold text-white shrink-0">CC</div>
         <div className="min-w-0">
           <div className="text-xs text-white font-semibold truncate">Agent</div>
-          <div className="text-[10px] text-gray-500 truncate">Allstate Sales</div>
+          <div className="text-[10px] text-gray-500 truncate">Insurance Sales</div>
         </div>
         <button className="ml-auto text-gray-600 hover:text-gray-300 text-sm shrink-0">🔔</button>
       </div>
