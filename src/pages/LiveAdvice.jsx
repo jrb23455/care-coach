@@ -105,7 +105,7 @@ function ApiKeySetup({ onSave }) {
   }
 
   return (
-    <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center bg-[#F8F7FF] px-6">
+    <div className="flex-1 flex items-center justify-center bg-[#F8F7FF] px-6">
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="w-16 h-16 bg-[#6B4EF3] rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-lg shadow-[#6B4EF3]/30">
@@ -208,7 +208,7 @@ export default function LiveAdvice() {
   }
 
   return (
-    <div className="h-[calc(100vh-5rem)] flex flex-col bg-[#F8F7FF]">
+    <div className="flex-1 flex flex-col bg-[#F8F7FF] min-h-0">
 
       {/* Sub-header */}
       <div className="bg-white border-b border-gray-100 px-6 py-3 shrink-0">

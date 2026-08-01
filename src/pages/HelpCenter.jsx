@@ -241,16 +241,45 @@ function getCoraResponse(text) {
 
 /* ─── SEARCH ─────────────────────────────────────────────────────── */
 
+const SYNONYMS = [
+  ['angry', 'yell', 'shout', 'scream', 'hostile', 'rude', 'upset', 'frustrat'],
+  ['cancel', 'switch', 'leav', 'competi', 'done with'],
+  ['manager', 'supervisor', 'market leader', 'escalat', 'boss'],
+  ['script', 'say', 'phrase', 'word', 'example', 'tell them'],
+  ['bill', 'premium', 'charge', 'payment', 'rate', 'price'],
+  ['claim', 'denied', 'coverage', 'reject'],
+  ['legal', 'lawyer', 'sue', 'attorney', 'record'],
+  ['calm', 'mindset', 'stress', 'burnout', 'mental', 'emotional'],
+  ['interrupt', 'talk over', 'wont let me'],
+  ['mistake', 'error', 'wrong', 'my fault'],
+  ['profan', 'curse', 'swear', 'abusive', 'language'],
+  ['cry', 'emotional', 'sob', 'upset'],
+]
+
 const ALL_SEARCHABLE = [
-  ...allFaqs.map((f, i) => ({ type: 'faq', title: f.q, sub: f.category, idx: i })),
-  ...resourceContent.map((r, i) => ({ type: 'resource', title: r.title, sub: r.type, idx: i })),
-  ...categories.map((c, i) => ({ type: 'category', title: c.title, sub: 'Topic', idx: i })),
+  ...allFaqs.map((f, i) => ({ type: 'faq', title: f.q, sub: f.category, body: f.a, icon: f.icon, idx: i })),
+  ...resourceContent.map((r, i) => ({ type: 'resource', title: r.title, sub: r.type, body: '', idx: i })),
+  ...categories.map((c, i) => ({ type: 'category', title: c.title, sub: 'Topic', body: c.desc, idx: i })),
 ]
 
 function searchItems(query) {
   const q = query.toLowerCase().trim()
   if (!q) return []
-  return ALL_SEARCHABLE.filter(item => item.title.toLowerCase().includes(q) || item.sub?.toLowerCase().includes(q)).slice(0, 7)
+  const group = SYNONYMS.find(g => g.some(s => q.includes(s) || s.includes(q))) || []
+  const terms = [...new Set([q, ...group])]
+  const scored = ALL_SEARCHABLE.map(item => {
+    const t = item.title.toLowerCase()
+    const b = (item.body || '').toLowerCase()
+    const s = (item.sub || '').toLowerCase()
+    let score = 0
+    for (const term of terms) {
+      if (t.includes(term)) score += 4
+      else if (b.includes(term)) score += 2
+      else if (s.includes(term)) score += 1
+    }
+    return { ...item, score }
+  }).filter(x => x.score > 0).sort((a, b) => b.score - a.score)
+  return scored.slice(0, 6)
 }
 
 /* ─── SUBCOMPONENTS ──────────────────────────────────────────────── */
@@ -385,6 +414,7 @@ export default function HelpCenter() {
   const [inputText, setInputText] = useState('')
   const [isTyping, setIsTyping] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
+  const [searchPanel, setSearchPanel] = useState(null) // { type, faq?, resourceIdx? }
   const [openResource, setOpenResource] = useState(null)
 
   const chatEndRef = useRef(null)
@@ -419,14 +449,12 @@ export default function HelpCenter() {
   function handleSearchClick(r) {
     setSearchQuery('')
     if (r.type === 'faq') {
-      const idx = r.idx
-      if (idx >= 5) setShowAllFaqs(true)
-      setOpenFaq(idx)
-      setTimeout(() => faqItemRefs.current[idx]?.scrollIntoView({ behavior: 'smooth', block: 'center' }), 120)
+      setSearchPanel({ type: 'faq', faq: allFaqs[r.idx] })
     } else if (r.type === 'resource') {
+      setSearchPanel(null)
       setOpenResource(r.idx)
-      setTimeout(() => resourcesRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
     } else if (r.type === 'category') {
+      setSearchPanel(null)
       handleCategory(categories[r.idx])
     }
   }
@@ -444,37 +472,59 @@ export default function HelpCenter() {
                 <span className="text-gray-400">🔍</span>
                 <input
                   value={searchQuery}
-                  onChange={e => setSearchQuery(e.target.value)}
+                  onChange={e => { setSearchQuery(e.target.value); setSearchPanel(null) }}
                   placeholder='Search topics, scripts, FAQs...'
                   className="flex-1 text-sm outline-none text-gray-700 placeholder-gray-400 bg-transparent"
                 />
-                {searchQuery && (
-                  <button onClick={() => setSearchQuery('')} className="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+                {(searchQuery || searchPanel) && (
+                  <button onClick={() => { setSearchQuery(''); setSearchPanel(null) }} className="text-gray-400 hover:text-gray-600 text-xl leading-none">×</button>
                 )}
               </div>
-              {searchResults.length > 0 && (
+
+              {/* Dropdown results */}
+              {searchQuery && searchResults.length > 0 && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl border border-gray-200 shadow-2xl z-20 overflow-hidden">
                   {searchResults.map((r, i) => (
                     <button key={i} onClick={() => handleSearchClick(r)}
                       className="w-full text-left px-4 py-3 hover:bg-[#F0EEFF] flex items-center gap-3 border-b border-gray-50 last:border-0 transition-colors">
-                      <span className="text-lg shrink-0">
-                        {r.type === 'faq' ? '❓' : r.type === 'resource' ? '📖' : '📂'}
+                      <span className="text-xl shrink-0">
+                        {r.type === 'faq' ? (r.icon || '❓') : r.type === 'resource' ? '📖' : '📂'}
                       </span>
-                      <div className="min-w-0">
-                        <p className="text-sm font-medium text-[#13105A] truncate">{r.title}</p>
-                        <p className="text-xs text-[#6B4EF3] font-medium capitalize">{r.type} · {r.sub}</p>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-semibold text-[#13105A] leading-snug">{r.title}</p>
+                        {r.type === 'faq' && r.body && (
+                          <p className="text-xs text-gray-400 mt-0.5 truncate">{r.body.slice(0, 80)}…</p>
+                        )}
+                        <p className="text-xs text-[#6B4EF3] font-medium mt-0.5 capitalize">{r.sub}</p>
                       </div>
-                      <span className="text-xs text-gray-400 shrink-0 ml-auto">→</span>
+                      <span className="text-gray-300 shrink-0">›</span>
                     </button>
                   ))}
                 </div>
               )}
               {searchQuery && searchResults.length === 0 && (
                 <div className="absolute top-full left-0 right-0 mt-1 bg-white rounded-xl border border-gray-200 shadow-xl z-20 p-4 text-sm text-gray-500">
-                  No results — try asking Cora directly in the chat below!
+                  No results — try asking Cora in the chat below!
                 </div>
               )}
             </div>
+
+            {/* Inline answer panel — appears right here, no scrolling */}
+            {searchPanel?.type === 'faq' && (
+              <div className="max-w-lg mt-3 bg-white rounded-2xl shadow-lg border border-[#6B4EF3]/20 overflow-hidden">
+                <div className="bg-[#6B4EF3] px-5 py-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg">{searchPanel.faq.icon}</span>
+                    <span className="text-white font-semibold text-sm leading-snug">{searchPanel.faq.q}</span>
+                  </div>
+                  <button onClick={() => setSearchPanel(null)} className="text-white/60 hover:text-white text-xl leading-none ml-3 shrink-0">×</button>
+                </div>
+                <div className="px-5 py-4">
+                  <p className="text-sm text-gray-700 leading-relaxed">{searchPanel.faq.a}</p>
+                  <p className="text-xs text-[#6B4EF3] font-medium mt-3">{searchPanel.faq.category}</p>
+                </div>
+              </div>
+            )}
           </div>
           <div className="shrink-0 relative">
             <div className="absolute -top-4 right-0 bg-white rounded-2xl rounded-br-none shadow-md px-4 py-3 max-w-[200px]">
@@ -538,21 +588,30 @@ export default function HelpCenter() {
                       </div>
                       <span className={`text-[#6B4EF3] shrink-0 transition-transform text-sm ${isOpen ? 'rotate-180' : ''}`}>▾</span>
                     </button>
-                    {isOpen && (
-                      <div className="px-4 pb-4 pl-14">
-                        <div className="bg-[#F8F7FF] rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-[#6B4EF3]/10">
-                          {faq.a}
+                    <div className={`grid transition-all duration-300 ease-in-out ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'}`}>
+                      <div className="overflow-hidden">
+                        <div className="px-4 pb-4 pl-14">
+                          <div className="bg-[#F8F7FF] rounded-xl p-4 text-sm text-gray-700 leading-relaxed border border-[#6B4EF3]/10">
+                            {faq.a}
+                          </div>
                         </div>
                       </div>
-                    )}
+                    </div>
                   </div>
                 )
               })}
             </div>
           </div>
 
+          {/* Cora Robot + Chat */}
+          <div className="flex flex-col">
+            {/* Robot sits right above chat */}
+            <div className="bg-gradient-to-b from-[#EAE7FF] to-[#D8D2FF] rounded-t-2xl pt-5 pb-0 flex flex-col items-center border border-b-0 border-[#C9C0FF]/50">
+              <CoraRobot size={110} />
+            </div>
+
           {/* Chat with Cora */}
-          <div className="border border-gray-200 rounded-2xl overflow-hidden flex flex-col shadow-sm" style={{ height: '520px' }}>
+          <div className="border border-gray-200 border-t-0 rounded-b-2xl overflow-hidden flex flex-col shadow-sm" style={{ height: '460px' }}>
             <div className="bg-gradient-to-r from-[#6B4EF3] to-[#8B6EFF] px-4 py-3 flex items-center gap-2 shrink-0">
               <div className="w-7 h-7 bg-white/20 rounded-full flex items-center justify-center text-xs font-bold text-white">C</div>
               <span className="font-semibold text-sm text-white">Chat with Cora</span>
@@ -605,6 +664,7 @@ export default function HelpCenter() {
                 className="w-7 h-7 bg-[#6B4EF3] hover:bg-[#5A3EE0] rounded-full flex items-center justify-center text-white text-sm transition-colors shrink-0">→</button>
             </div>
           </div>
+          </div>{/* end flex-col robot+chat wrapper */}
         </div>
       </section>
 

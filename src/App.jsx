@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import Header from './components/Header'
+import Sidebar from './components/Sidebar'
+import TopBar from './components/TopBar'
 import Home from './pages/Home'
 import HelpCenter from './pages/HelpCenter'
 import Training from './pages/Training'
@@ -13,12 +14,17 @@ export default function App() {
   }, [currentPage])
 
   return (
-    <div className="min-h-screen bg-white font-sans">
-      <Header currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
-      {currentPage === 'help' && <HelpCenter setCurrentPage={setCurrentPage} />}
-      {currentPage === 'training' && <Training />}
-      {currentPage === 'live' && <LiveAdvice />}
+    <div className="h-screen flex overflow-hidden bg-[#F8F7FF]">
+      <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      <div className="flex-1 flex flex-col min-w-0">
+        <TopBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        <main className={`flex-1 min-h-0 ${currentPage === 'live' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto'}`}>
+          {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
+          {currentPage === 'help' && <HelpCenter setCurrentPage={setCurrentPage} />}
+          {currentPage === 'training' && <Training />}
+          {currentPage === 'live' && <LiveAdvice />}
+        </main>
+      </div>
     </div>
   )
 }
