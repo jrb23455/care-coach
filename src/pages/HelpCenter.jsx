@@ -341,8 +341,7 @@ export default function HelpCenter() {
   const [showAllFaqs, setShowAllFaqs] = useState(false)
   const [messages, setMessages] = useState([])
   const [inputText, setInputText] = useState('')
-  const [helpful, setHelpful] = useState(null)
-  const [isTyping, setIsTyping] = useState(false)
+const [isTyping, setIsTyping] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [openResource, setOpenResource] = useState(null)
   const chatEndRef = useRef(null)
@@ -596,38 +595,7 @@ export default function HelpCenter() {
         </div>
       </section>
 
-      {/* ── Was this helpful ── */}
-      <section className="bg-white px-6 py-6 border-t border-gray-100">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-purple-50 rounded-xl flex items-center justify-center text-xl">👍</div>
-            <div>
-              <p className="font-semibold text-sm text-[#13105A]">Was this helpful?</p>
-              <p className="text-xs text-gray-400">Your feedback helps us improve.</p>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setHelpful(true)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
-                helpful === true ? 'bg-[#6B4EF3] text-white border-[#6B4EF3]' : 'border-gray-200 text-gray-700 hover:border-[#6B4EF3]'
-              }`}
-            >
-              {helpful === true ? '✓ Thanks!' : 'Yes, it was'}
-            </button>
-            <button
-              onClick={() => setHelpful(false)}
-              className={`px-4 py-2 rounded-xl text-sm font-medium border transition-colors ${
-                helpful === false ? 'bg-gray-100 text-gray-600 border-gray-200' : 'border-gray-200 text-gray-700 hover:border-gray-400'
-              }`}
-            >
-              {helpful === false ? 'Thanks for letting us know' : 'Not really'}
-            </button>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
+{/* ── Footer ── */}
       <footer className="bg-white px-6 py-4 border-t border-gray-100">
         <div className="max-w-7xl mx-auto flex justify-between items-center text-xs text-gray-400">
           <span>
