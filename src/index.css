@@ -3,3 +3,32 @@
 * {
   font-family: 'Nunito', system-ui, sans-serif;
 }
+
+/* ── Semantic color tokens ── */
+:root {
+  --bg:          #F5F3FF;
+  --card:        #ffffff;
+  --border:      #ede9fe;
+  --text:        #0f0b30;
+  --text-2:      #6b7280;
+  --text-3:      #9ca3af;
+  --input-bg:    #faf9ff;
+  --topbar-bg:   #ffffff;
+  --chip-bg:     rgba(123, 63, 242, 0.09);
+  --chip-text:   #7B3FF2;
+  --result-bg:   rgba(255,255,255,0.07);
+}
+
+:root[data-theme="dark"] {
+  --bg:          #080618;
+  --card:        #110e28;
+  --border:      rgba(255, 255, 255, 0.07);
+  --text:        #ede9fe;
+  --text-2:      rgba(237, 233, 254, 0.55);
+  --text-3:      rgba(237, 233, 254, 0.30);
+  --input-bg:    #0e0b24;
+  --topbar-bg:   #0d0b22;
+  --chip-bg:     rgba(123, 63, 242, 0.18);
+  --chip-text:   #c084fc;
+  --result-bg:   rgba(255,255,255,0.05);
+}

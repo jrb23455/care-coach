@@ -71,7 +71,7 @@ function AdviceBlock({ message, isStreaming, onFollowUp }) {
     return (
       <div className="flex justify-end mb-4">
         <div className="text-sm leading-relaxed px-4 py-2.5 max-w-[75%] rounded-2xl rounded-br-none font-semibold"
-          style={{ background: '#EAE7FF', color: '#13105A' }}>
+          style={{ background: 'rgba(123,63,242,0.12)', color: 'var(--text)' }}>
           {message.content}
         </div>
       </div>
@@ -101,13 +101,13 @@ function AdviceBlock({ message, isStreaming, onFollowUp }) {
           {why && (
             <div className="rounded-2xl p-3.5" style={{ background: 'rgba(123,63,242,0.08)', border: '1.5px solid rgba(123,63,242,0.15)' }}>
               <p className="text-[10px] font-black uppercase tracking-wide mb-1.5" style={{ color: '#7B3FF2' }}>Why It Works</p>
-              <p className="text-sm text-[#13105A] leading-relaxed font-semibold">{why}</p>
+              <p className="text-sm leading-relaxed font-semibold" style={{ color: 'var(--text)' }}>{why}</p>
             </div>
           )}
           {listen && (
             <div className="rounded-2xl p-3.5" style={{ background: 'rgba(16,185,129,0.07)', border: '1.5px solid rgba(16,185,129,0.15)' }}>
               <p className="text-[10px] font-black uppercase tracking-wide mb-1.5" style={{ color: '#10B981' }}>Listen For</p>
-              <p className="text-sm text-[#13105A] leading-relaxed font-semibold">{listen}</p>
+              <p className="text-sm leading-relaxed font-semibold" style={{ color: 'var(--text)' }}>{listen}</p>
             </div>
           )}
         </div>
@@ -145,21 +145,21 @@ function ApiKeySetup({ onSave }) {
   }
 
   return (
-    <div className="flex-1 flex items-center justify-center px-6" style={{ background: '#F5F3FF' }}>
+    <div className="flex-1 flex items-center justify-center px-6" style={{ background: 'var(--bg)' }}>
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
             <CoraRobot size={110} pose="present" />
           </div>
-          <h1 className="text-2xl font-black text-[#0f0b30] mb-2">Connect Cora's Brain</h1>
-          <p className="text-gray-500 text-sm leading-relaxed font-semibold">
+          <h1 className="text-2xl font-black mb-2" style={{ color: 'var(--text)' }}>Connect Cora's Brain</h1>
+          <p className="text-sm leading-relaxed font-semibold" style={{ color: 'var(--text-2)' }}>
             Enter your Anthropic API key to unlock real-time coaching during live calls.
             Stored in your browser only — never sent anywhere except directly to Anthropic.
           </p>
         </div>
 
-        <div className="bg-white rounded-3xl shadow-sm p-6" style={{ border: '1.5px solid #ede9fe' }}>
-          <label className="block text-sm font-black text-[#0f0b30] mb-2">Anthropic API Key</label>
+        <div className="rounded-3xl shadow-sm p-6" style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
+          <label className="block text-sm font-black mb-2" style={{ color: 'var(--text)' }}>Anthropic API Key</label>
           <input
             type="password"
             value={key}
@@ -181,7 +181,7 @@ function ApiKeySetup({ onSave }) {
             Connect &amp; Start Coaching
           </button>
 
-          <p className="text-xs text-gray-400 text-center mt-4 font-semibold">
+          <p className="text-xs text-center mt-4 font-semibold" style={{ color: 'var(--text-3)' }}>
             Get a key at{' '}
             <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer"
               className="font-mono hover:underline" style={{ color: '#7B3FF2' }}>
@@ -251,18 +251,18 @@ export default function LiveAdvice() {
   const lastIsAssistant = messages.length > 0 && messages[messages.length - 1].role === 'assistant'
 
   return (
-    <div className="flex-1 flex flex-col min-h-0" style={{ background: '#F5F3FF' }}>
+    <div className="flex-1 flex flex-col min-h-0" style={{ background: 'var(--bg)' }}>
 
       {/* Sub-header */}
-      <div className="bg-white shrink-0 px-6 py-3" style={{ borderBottom: '1.5px solid #ede9fe' }}>
+      <div className="shrink-0 px-6 py-3" style={{ background: 'var(--card)', borderBottom: '1.5px solid var(--border)' }}>
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              <span className="text-sm font-black text-[#0f0b30]">Live Call Mode</span>
+              <span className="text-sm font-black" style={{ color: 'var(--text)' }}>Live Call Mode</span>
             </span>
-            <span className="text-gray-200 select-none">|</span>
-            <span className="text-sm text-gray-400 font-semibold hidden sm:inline">
+            <span className="select-none" style={{ color: 'var(--border)' }}>|</span>
+            <span className="text-sm font-semibold hidden sm:inline" style={{ color: 'var(--text-2)' }}>
               Describe what's happening → get the exact words to say right now
             </span>
           </div>
@@ -275,7 +275,7 @@ export default function LiveAdvice() {
       </div>
 
       {/* Quick situation chips */}
-      <div className="bg-white shrink-0 px-6 py-3" style={{ borderBottom: '1.5px solid #ede9fe' }}>
+      <div className="shrink-0 px-6 py-3" style={{ background: 'var(--card)', borderBottom: '1.5px solid var(--border)' }}>
         <div className="max-w-3xl mx-auto flex flex-wrap gap-2">
           {QUICK_SITUATIONS.map((s, i) => (
             <button key={i} onClick={() => sendMessage(s.prompt)} disabled={isLoading}
@@ -296,8 +296,8 @@ export default function LiveAdvice() {
               <div className="flex justify-center mb-4">
                 <CoraRobot size={120} pose="thumbs" />
               </div>
-              <h2 className="text-lg font-black text-[#0f0b30] mb-2">Ready to coach</h2>
-              <p className="text-sm text-gray-400 font-semibold max-w-sm mx-auto leading-relaxed">
+              <h2 className="text-lg font-black mb-2" style={{ color: 'var(--text)' }}>Ready to coach</h2>
+              <p className="text-sm font-semibold max-w-sm mx-auto leading-relaxed" style={{ color: 'var(--text-2)' }}>
                 Tap a quick button above or type what's happening on your call.
                 Cora gives you the exact script to say right now.
               </p>
@@ -327,9 +327,9 @@ export default function LiveAdvice() {
           {isLoading && !streamingText && (
             <div className="flex justify-start mb-4">
               <div className="flex items-center gap-2 px-5 py-3.5 rounded-2xl shadow-sm"
-                style={{ background: 'white', border: '1.5px solid #ede9fe' }}>
+                style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
                 <CoraRobot size={24} shadow={false} />
-                <span className="text-sm text-gray-400 font-semibold">Cora is thinking</span>
+                <span className="text-sm font-semibold" style={{ color: 'var(--text-2)' }}>Cora is thinking</span>
                 <BounceDots />
               </div>
             </div>
@@ -347,7 +347,7 @@ export default function LiveAdvice() {
       </div>
 
       {/* Input */}
-      <div className="bg-white shrink-0 px-6 py-4" style={{ borderTop: '1.5px solid #ede9fe' }}>
+      <div className="shrink-0 px-6 py-4" style={{ background: 'var(--card)', borderTop: '1.5px solid var(--border)' }}>
         <div className="max-w-3xl mx-auto">
           <div className="flex gap-3 items-end">
             <textarea
@@ -360,8 +360,8 @@ export default function LiveAdvice() {
               placeholder="What's happening on your call right now? (e.g. 'Customer just found out claim was denied and is escalating')"
               rows={2}
               disabled={isLoading}
-              className="flex-1 rounded-2xl px-4 py-3 text-sm text-[#0f0b30] placeholder-gray-400 focus:outline-none resize-none disabled:opacity-50 transition-all font-semibold"
-              style={{ border: '1.5px solid #ede9fe', background: '#faf9ff' }}
+              className="flex-1 rounded-2xl px-4 py-3 text-sm placeholder-gray-400 focus:outline-none resize-none disabled:opacity-50 transition-all font-semibold" style={{ color: 'var(--text)' }}
+              style={{ border: '1.5px solid var(--border)', background: 'var(--input-bg)' }}
             />
             <button
               onClick={() => sendMessage(input)}
@@ -374,7 +374,7 @@ export default function LiveAdvice() {
               </svg>
             </button>
           </div>
-          <p className="text-xs text-gray-400 mt-2 font-semibold">Enter to send · Shift+Enter for new line</p>
+          <p className="text-xs mt-2 font-semibold" style={{ color: 'var(--text-3)' }}>Enter to send · Shift+Enter for new line</p>
         </div>
       </div>
     </div>

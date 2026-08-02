@@ -5,24 +5,26 @@ import Home from './pages/Home'
 import HelpCenter from './pages/HelpCenter'
 import Training from './pages/Training'
 import LiveAdvice from './pages/LiveAdvice'
+import { useTheme } from './hooks/useTheme'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home')
+  const { dark, toggle } = useTheme()
 
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [currentPage])
 
   return (
-    <div className="h-screen flex overflow-hidden bg-[#F8F7FF]">
+    <div className="h-screen flex overflow-hidden" style={{ background: 'var(--bg)' }}>
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <div className="flex-1 flex flex-col min-w-0">
-        <TopBar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        <TopBar currentPage={currentPage} setCurrentPage={setCurrentPage} dark={dark} onToggleTheme={toggle} />
         <main className={`flex-1 min-h-0 ${currentPage === 'live' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto'}`}>
-          {currentPage === 'home' && <Home setCurrentPage={setCurrentPage} />}
-          {currentPage === 'help' && <HelpCenter setCurrentPage={setCurrentPage} />}
+          {currentPage === 'home'     && <Home setCurrentPage={setCurrentPage} />}
+          {currentPage === 'help'     && <HelpCenter setCurrentPage={setCurrentPage} />}
           {currentPage === 'training' && <Training />}
-          {currentPage === 'live' && <LiveAdvice />}
+          {currentPage === 'live'     && <LiveAdvice />}
         </main>
       </div>
     </div>

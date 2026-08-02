@@ -5,6 +5,8 @@ const POSE_SRC = {
   think: '/cora-think.png',
   arms: '/cora-arms.png',
   wink: '/cora-wink.png',
+  sleep: '/cora-sleep.png',
+  yawn: '/cora-yawn.png',
 }
 
 export default function CoraRobot({ size = 200, pose = 'wave', className = '', shadow = true }) {
