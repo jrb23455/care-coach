@@ -24,6 +24,7 @@ const PILLAR_BG = {
 }
 const DIFFICULTY_LABEL = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' }
 const DIFFICULTY_COLOR = { beginner: '#10B981', intermediate: '#F59E0B', advanced: '#EF4444' }
+const DIFFICULTY_BG = { beginner: 'rgba(16,185,129,0.12)', intermediate: 'rgba(245,158,11,0.12)', advanced: 'rgba(239,68,68,0.12)' }
 
 function ScenarioBrowser({ prog, onStart }) {
   const [filter, setFilter] = useState('all')
@@ -34,48 +35,59 @@ function ScenarioBrowser({ prog, onStart }) {
     <div>
       {/* filter bar */}
       <div className="flex gap-2 flex-wrap mb-6">
-        {pillars.map(p => (
-          <button key={p}
-            onClick={() => setFilter(p)}
-            className="px-4 py-1.5 rounded-full text-sm font-medium transition-colors"
-            style={{
-              background: filter === p ? '#0B0934' : '#F3F4F6',
-              color: filter === p ? '#fff' : '#374151',
-            }}>
-            {p === 'all' ? 'All Scenarios' : PILLAR_LABELS[p]}
-          </button>
-        ))}
+        {pillars.map(p => {
+          const active = filter === p
+          const col = p === 'all' ? '#7B3FF2' : PILLAR_COLORS[p]
+          return (
+            <button key={p}
+              onClick={() => setFilter(p)}
+              className="px-4 py-1.5 rounded-2xl text-sm font-black transition-all hover:scale-105"
+              style={{
+                background: active ? col : p === 'all' ? 'rgba(123,63,242,0.09)' : PILLAR_BG[p],
+                color: active ? '#fff' : col,
+                boxShadow: active ? `0 4px 12px ${col}40` : 'none',
+              }}>
+              {p === 'all' ? 'All Scenarios' : PILLAR_LABELS[p]}
+            </button>
+          )
+        })}
       </div>
 
       <div className="grid gap-3">
         {shown.map(s => {
           const done = prog.completed[s.id]
+          const pillarColor = PILLAR_COLORS[s.pillar]
           return (
             <div key={s.id}
-              className="border rounded-xl p-4 flex items-start justify-between gap-4 hover:shadow-md transition-shadow cursor-pointer bg-white"
+              className="rounded-2xl p-4 flex items-start justify-between gap-4 hover:shadow-md transition-all cursor-pointer bg-white hover:scale-[1.01]"
+              style={{ border: `1.5px solid #ede9fe`, borderLeft: `4px solid ${pillarColor}` }}
               onClick={() => onStart(s)}>
               <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 mb-1 flex-wrap">
-                  <span className="text-xs font-semibold px-2 py-0.5 rounded-full"
-                    style={{ background: PILLAR_BG[s.pillar], color: PILLAR_COLORS[s.pillar] }}>
+                <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full"
+                    style={{ background: PILLAR_BG[s.pillar], color: pillarColor }}>
                     {PILLAR_LABELS[s.pillar]}
                   </span>
-                  <span className="text-xs font-medium" style={{ color: DIFFICULTY_COLOR[s.difficulty] }}>
+                  <span className="text-xs font-black px-2.5 py-0.5 rounded-full"
+                    style={{ background: DIFFICULTY_BG[s.difficulty], color: DIFFICULTY_COLOR[s.difficulty] }}>
                     {DIFFICULTY_LABEL[s.difficulty]}
                   </span>
                   {done && (
-                    <span className="text-xs font-semibold text-green-600 flex items-center gap-1">
-                      <svg viewBox="0 0 16 16" width="12" height="12" fill="currentColor"><path d="M13.5 2.5l-7 7-3-3L2 8l4.5 4.5 8.5-8.5z"/></svg>
+                    <span className="text-xs font-black text-green-600 flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.10)' }}>
+                      <svg viewBox="0 0 16 16" width="10" height="10" fill="currentColor"><path d="M13.5 2.5l-7 7-3-3L2 8l4.5 4.5 8.5-8.5z"/></svg>
                       {done.score}pts
                     </span>
                   )}
                 </div>
-                <div className="font-semibold text-gray-800">{s.title}</div>
-                <div className="text-sm text-gray-500 mt-0.5 line-clamp-1">"{s.customerLine.slice(0, 80)}…"</div>
+                <div className="font-black text-[#0f0b30]">{s.title}</div>
+                <div className="text-sm text-gray-500 mt-0.5 line-clamp-1 font-semibold">"{s.customerLine.slice(0, 80)}…"</div>
               </div>
               <div className="text-right shrink-0">
-                <div className="text-xs text-indigo-500 font-semibold mb-1">+{s.xp} XP</div>
-                <button className="text-xs px-3 py-1 rounded-full bg-indigo-50 text-indigo-700 font-medium">
+                <div className="text-xs font-black mb-2" style={{ color: pillarColor }}>
+                  {done ? '+0–5 XP' : `+${s.xp} XP`}
+                </div>
+                <button className="text-xs px-3 py-1.5 rounded-xl font-black text-white transition-all hover:scale-105"
+                  style={{ background: done ? 'linear-gradient(135deg, #7B3FF2, #a855f7)' : `linear-gradient(135deg, ${pillarColor}, ${pillarColor}cc)`, boxShadow: `0 3px 10px ${pillarColor}40` }}>
                   {done ? 'Retry' : 'Start'}
                 </button>
               </div>
@@ -89,7 +101,7 @@ function ScenarioBrowser({ prog, onStart }) {
 
 const TIMER_SECONDS = 60
 
-function ScenarioPlayer({ scenario, onComplete, onBack }) {
+function ScenarioPlayer({ scenario, prevBest, onComplete, onBack }) {
   const [phase, setPhase] = useState('intro')  // intro | question | result | expert
   const [chosen, setChosen] = useState(null)
   const [timeLeft, setTimeLeft] = useState(TIMER_SECONDS)
@@ -123,6 +135,12 @@ function ScenarioPlayer({ scenario, onComplete, onBack }) {
     if (phase === 'intro') { setPhase('question'); setTimeLeft(TIMER_SECONDS) }
     else if (phase === 'result') setPhase('expert')
     else onComplete(chosen?.score ?? 0)
+  }
+
+  const isRetry = prevBest !== null && prevBest !== undefined
+  function calcXP(score) {
+    if (!isRetry) return score >= 90 ? scenario.xp : Math.floor(scenario.xp / 2)
+    return score > prevBest ? 5 : 0
   }
 
   const timerColor = timeLeft > 30 ? '#10B981' : timeLeft > 10 ? '#F59E0B' : '#EF4444'
@@ -245,7 +263,10 @@ function ScenarioPlayer({ scenario, onComplete, onBack }) {
             <button onClick={() => onComplete(chosen?.score ?? 0)}
               className="flex-1 py-3 rounded-xl font-semibold text-white"
               style={{ background: '#6B4EF3' }}>
-              Finish (+{chosen?.score >= 90 ? scenario.xp : Math.floor(scenario.xp / 2)} XP)
+              {(() => {
+                const xp = calcXP(chosen?.score ?? 0)
+                return xp > 0 ? `Finish (+${xp} XP)` : 'Finish (no new XP)'
+              })()}
             </button>
           </div>
         </div>
@@ -264,19 +285,21 @@ function PillarSummary({ prog, onStart }) {
         const total = ids.length
         const nextUp = practiceScenarios.find(s => s.pillar === p && !prog.completed[s.id])
         return (
-          <div key={p} className="bg-white rounded-xl border p-4 flex flex-col items-center text-center hover:shadow-md transition-shadow">
+          <div key={p} className="rounded-2xl p-4 flex flex-col items-center text-center hover:scale-[1.03] transition-all cursor-pointer"
+            style={{ background: 'white', border: `1.5px solid #ede9fe`, borderTop: `4px solid ${PILLAR_COLORS[p]}` }}>
             <ProgressRing value={done} max={total} size={72} stroke={7} color={PILLAR_COLORS[p]}>
               <span className="text-xs font-black" style={{ color: PILLAR_COLORS[p] }}>{done}/{total}</span>
             </ProgressRing>
-            <div className="text-xs font-semibold text-gray-700 mt-2">{PILLAR_LABELS[p]}</div>
+            <div className="text-xs font-black text-[#0f0b30] mt-2">{PILLAR_LABELS[p]}</div>
             {nextUp && (
               <button onClick={() => onStart(nextUp)}
-                className="mt-2 text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-600 font-medium hover:bg-indigo-100 transition-colors">
+                className="mt-2 text-xs px-2.5 py-0.5 rounded-xl font-black text-white hover:scale-105 transition-all"
+                style={{ background: PILLAR_COLORS[p] }}>
                 Next →
               </button>
             )}
             {done === total && (
-              <span className="mt-2 text-xs font-bold text-green-600">✓ Complete</span>
+              <span className="mt-2 text-xs font-black text-green-600 px-2 py-0.5 rounded-xl" style={{ background: 'rgba(16,185,129,0.10)' }}>✓ Done!</span>
             )}
           </div>
         )
@@ -292,8 +315,14 @@ export default function Training() {
 
   function handleComplete(score) {
     if (activeScenario) {
-      completeScenario(activeScenario.id, score)
-      setLastResult({ scenario: activeScenario, score })
+      const prevBest = prog.completed[activeScenario.id]?.score ?? null
+      const isRetry = prevBest !== null
+      const maxXp = activeScenario.xp
+      let xpEarned = 0
+      if (!isRetry) xpEarned = score >= 90 ? maxXp : Math.floor(maxXp / 2)
+      else if (score > prevBest) xpEarned = 5
+      completeScenario(activeScenario.id, score, maxXp)
+      setLastResult({ scenario: activeScenario, score, xpEarned })
     }
     setActiveScenario(null)
   }
@@ -305,17 +334,17 @@ export default function Training() {
         <div className="flex items-center gap-4">
           <CoraRobot size={64} pose="think" />
           <div>
-            <h1 className="text-2xl font-black text-gray-900">Training Center</h1>
-            <p className="text-gray-500 text-sm mt-0.5">Practice real customer scenarios with scored feedback</p>
+            <h1 className="text-2xl font-black text-[#0f0b30]">Training Center</h1>
+            <p className="text-gray-500 text-sm mt-0.5 font-semibold">Practice real customer scenarios with scored feedback</p>
           </div>
         </div>
         <div className="text-right">
-          <div className="text-xs text-gray-500 font-medium">Level {xpLevel}</div>
+          <div className="text-xs text-gray-500 font-bold">Level {xpLevel}</div>
           <div className="flex items-center gap-2 mt-1">
-            <div className="w-24 h-2 rounded-full bg-gray-100 overflow-hidden">
-              <div className="h-full rounded-full bg-indigo-500 transition-all" style={{ width: `${xpInLevel}%` }} />
+            <div className="w-24 h-2.5 rounded-full overflow-hidden" style={{ background: 'rgba(123,63,242,0.12)' }}>
+              <div className="h-full rounded-full transition-all" style={{ width: `${xpInLevel}%`, background: 'linear-gradient(90deg, #7B3FF2, #c084fc, #f472b6)' }} />
             </div>
-            <span className="text-xs font-bold text-indigo-600">{xpInLevel}/100 XP</span>
+            <span className="text-xs font-black" style={{ color: '#7B3FF2' }}>{xpInLevel} XP</span>
           </div>
         </div>
       </div>
@@ -330,7 +359,9 @@ export default function Training() {
           <div>
             <div className="font-semibold text-gray-800">{lastResult.scenario.title} — complete!</div>
             <div className="text-sm text-gray-600">
-              {lastResult.score >= 90 ? `Perfect — you earned ${lastResult.scenario.xp} XP!` : `Good practice — keep going.`}
+              {lastResult.xpEarned > 0
+                ? `+${lastResult.xpEarned} XP earned!`
+                : 'No new XP — beat your best score to earn more.'}
             </div>
           </div>
           <button onClick={() => setLastResult(null)} className="ml-auto text-gray-400 hover:text-gray-600">✕</button>
@@ -340,6 +371,7 @@ export default function Training() {
       {activeScenario ? (
         <ScenarioPlayer
           scenario={activeScenario}
+          prevBest={prog.completed[activeScenario.id]?.score ?? null}
           onComplete={handleComplete}
           onBack={() => setActiveScenario(null)}
         />

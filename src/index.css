@@ -1,1 +1,5 @@
 @import "tailwindcss";
+
+* {
+  font-family: 'Nunito', system-ui, sans-serif;
+}

@@ -40,6 +40,12 @@ export function clearApiKey() {
 }
 
 export async function askCora(messages, onChunk) {
+  // Only send the last 6 messages (3 exchanges) to keep latency low
+  const trimmed = messages.slice(-6)
+  return streamClaude({ system: SYSTEM_PROMPT, messages: trimmed, onChunk, maxTokens: 350 })
+}
+
+export async function streamClaude({ system, messages, onChunk, maxTokens = 600 }) {
   const key = getApiKey()
   if (!key) throw new Error('NO_KEY')
 
@@ -53,9 +59,9 @@ export async function askCora(messages, onChunk) {
     },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 500,
+      max_tokens: maxTokens,
       stream: true,
-      system: SYSTEM_PROMPT,
+      system,
       messages,
     }),
   })
@@ -85,7 +91,7 @@ export async function askCora(messages, onChunk) {
         const parsed = JSON.parse(data)
         if (parsed.type === 'content_block_delta' && parsed.delta?.type === 'text_delta') {
           fullText += parsed.delta.text
-          onChunk(fullText)
+          onChunk?.(fullText)
         }
       } catch {}
     }
