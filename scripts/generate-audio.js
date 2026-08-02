@@ -20,8 +20,8 @@ if (!API_KEY) {
 }
 
 const VOICES = {
-  customer: { id: 'IKne3meq5aSn9XLyUdCD', stability: 0.28, style: 0.50 }, // Charlie
-  agent:    { id: '21m00Tcm4TlvDq8ikWAM', stability: 0.68, style: 0.10 }, // Rachel
+  customer: { id: 'TxGEqnHWrfWFTfGW9XjX', stability: 0.12, style: 0.80, similarity: 0.85 }, // Josh — American, high expressiveness
+  agent:    { id: '21m00Tcm4TlvDq8ikWAM', stability: 0.68, style: 0.10, similarity: 0.75 }, // Rachel — warm, professional
 }
 const MODEL = 'eleven_turbo_v2'
 
@@ -78,7 +78,7 @@ function tts(text, voice) {
     model_id: MODEL,
     voice_settings: {
       stability: voice.stability,
-      similarity_boost: 0.75,
+      similarity_boost: voice.similarity,
       style: voice.style,
       use_speaker_boost: true,
     },
