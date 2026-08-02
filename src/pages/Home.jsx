@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useProgress } from '../hooks/useProgress'
-import { useTheme } from '../hooks/useTheme'
 import { practiceScenarios } from '../data/practiceScenarios'
 import CoraRobot from '../components/CoraRobot'
 
@@ -35,7 +34,6 @@ const RECOMMENDED = [
 
 export default function Home({ setCurrentPage }) {
   const { prog, pillarProgress, xpLevel } = useProgress()
-  const { dark } = useTheme()
   const totalDone = Object.keys(prog.completed).length
   const totalScenarios = practiceScenarios.length
   const [tipIdx, setTipIdx] = useState(0)
@@ -170,7 +168,7 @@ export default function Home({ setCurrentPage }) {
         <div className="space-y-4">
           <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(165deg, #0f0b30 0%, #1a0850 100%)' }}>
             <div className="flex justify-center pt-5 pb-2">
-              <CoraRobot size={100} pose={dark ? 'sleep' : 'think'} />
+              <CoraRobot size={100} pose="yawn" />
             </div>
             <div className="px-4 pb-4">
               <div className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-2">Cora's Tip</div>

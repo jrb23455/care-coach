@@ -526,8 +526,8 @@ export default function HelpCenter() {
               </div>
             )}
           </div>
-          <div className="shrink-0 flex items-end gap-3">
-            <div className="bg-white rounded-2xl rounded-br-none shadow-md px-4 py-3 max-w-[200px] mb-10">
+          <div className="shrink-0 relative">
+            <div className="absolute top-2 right-full mr-3 z-10 bg-white rounded-2xl rounded-br-none shadow-md px-4 py-3 w-[200px]">
               <p className="text-xs text-[#13105A]">Ask me anything about handling difficult customers in insurance sales.</p>
             </div>
             <CoraRobot size={170} pose="present" />
