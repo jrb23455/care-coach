@@ -13,9 +13,9 @@ import { fileURLToPath } from 'node:url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const API_KEY = process.env.ELEVENLABS_API_KEY
+const API_KEY = process.env.CARECOACH_API_KEY || process.env.ELEVENLABS_API_KEY
 if (!API_KEY) {
-  console.error('Usage: ELEVENLABS_API_KEY=your_key npm run generate-audio')
+  console.error('Usage: CARECOACH_API_KEY=your_key npm run generate-audio')
   process.exit(1)
 }
 
