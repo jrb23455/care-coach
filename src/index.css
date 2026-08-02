@@ -17,6 +17,8 @@
   --chip-bg:     rgba(123, 63, 242, 0.09);
   --chip-text:   #7B3FF2;
   --result-bg:   rgba(255,255,255,0.07);
+  --hero-bg:     linear-gradient(135deg, #EAE7FF 0%, #D4CEFF 100%);
+  --chat-bg:     linear-gradient(180deg, #EAE7FF 0%, #D8D2FF 100%);
 }
 
 :root[data-theme="dark"] {
@@ -31,4 +33,6 @@
   --chip-bg:     rgba(123, 63, 242, 0.18);
   --chip-text:   #c084fc;
   --result-bg:   rgba(255,255,255,0.05);
+  --hero-bg:     linear-gradient(135deg, #12103d 0%, #0d0a2e 100%);
+  --chat-bg:     linear-gradient(180deg, #1a1440 0%, #110e28 100%);
 }

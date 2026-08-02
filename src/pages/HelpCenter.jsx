@@ -1,7 +1,6 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import CoraRobot from '../components/CoraRobot'
 import ConversationPlayer from '../components/ConversationPlayer'
-import { useTheme } from '../hooks/useTheme'
 import { getApiKey, askCoraResources } from '../services/claudeApi'
 import { audioConversations } from '../data/audioConversations'
 
@@ -530,7 +529,6 @@ function ResourceModal({ resource, onClose, onAskCora }) {
 /* ─── MAIN COMPONENT ─────────────────────────────────────────────── */
 
 export default function HelpCenter() {
-  const { dark } = useTheme()
   const [openFaq, setOpenFaq] = useState(null)
   const [showAllFaqs, setShowAllFaqs] = useState(false)
   const [messages, setMessages] = useState([])
@@ -609,15 +607,11 @@ export default function HelpCenter() {
   }
 
   const heroStyle = {
-    background: dark
-      ? 'linear-gradient(135deg, #12103d 0%, #0d0a2e 100%)'
-      : 'linear-gradient(135deg, #EAE7FF 0%, #D4CEFF 100%)',
+    background: 'var(--hero-bg)',
   }
 
   const chatRobotStyle = {
-    background: dark
-      ? 'linear-gradient(180deg, #1a1440 0%, #110e28 100%)'
-      : 'linear-gradient(180deg, #EAE7FF 0%, #D8D2FF 100%)',
+    background: 'var(--chat-bg)',
     border: '1.5px solid var(--border)',
     borderBottom: 'none',
   }
