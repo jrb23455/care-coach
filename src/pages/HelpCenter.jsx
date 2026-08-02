@@ -479,6 +479,14 @@ export default function HelpCenter() {
   const searchResults = useMemo(() => searchItems(searchQuery), [searchQuery])
 
   useEffect(() => {
+    const target = sessionStorage.getItem('help_scroll_to')
+    if (target) {
+      sessionStorage.removeItem('help_scroll_to')
+      setTimeout(() => document.getElementById(target)?.scrollIntoView({ behavior: 'smooth' }), 120)
+    }
+  }, [])
+
+  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages, isTyping, streamingReply])
 
@@ -806,7 +814,7 @@ export default function HelpCenter() {
       </section>
 
       {/* ── Listen & Learn ── */}
-      <section className="px-6 py-10" style={{ background: 'var(--bg)', borderTop: '1.5px solid var(--border)' }}>
+      <section id="listen-learn" className="px-6 py-10" style={{ background: 'var(--bg)', borderTop: '1.5px solid var(--border)' }}>
         <div className="max-w-7xl mx-auto">
           <div className="flex items-start justify-between mb-6 gap-4">
             <div>

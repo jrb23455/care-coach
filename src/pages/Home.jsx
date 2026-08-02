@@ -58,7 +58,7 @@ const RECOMMENDED = [
   {
     type: 'SCENARIO', typeColor: '#7B3FF2', bg: 'rgba(123,63,242,0.08)',
     title: 'Handling Objections That Turn Rude', icon: '🎧', meta: '8 min',
-    page: 'training',
+    page: 'help', scrollTo: 'listen-learn',
   },
   {
     type: 'TOOL', typeColor: '#06b6d4', bg: 'rgba(6,182,212,0.08)',
@@ -164,7 +164,10 @@ export default function Home({ setCurrentPage }) {
 
   function handleRecommendedClick(r) {
     if (r.modal) setOpenCard(r)
-    else if (r.page) setCurrentPage(r.page)
+    else if (r.page) {
+      if (r.scrollTo) sessionStorage.setItem('help_scroll_to', r.scrollTo)
+      setCurrentPage(r.page)
+    }
   }
 
   return (
