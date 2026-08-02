@@ -6,12 +6,14 @@ import HelpCenter from './pages/HelpCenter'
 import Training from './pages/Training'
 import LiveAdvice from './pages/LiveAdvice'
 import Onboarding from './components/Onboarding'
+import SplashScreen, { shouldShowSplash } from './components/SplashScreen'
 import { useTheme } from './hooks/useTheme'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const { dark, toggle } = useTheme()
   const mainRef = useRef(null)
+  const [showSplash, setShowSplash] = useState(() => shouldShowSplash())
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem('carecoach_onboarded'))
 
   useEffect(() => {
@@ -25,6 +27,7 @@ export default function App() {
 
   return (
     <div className="h-screen flex overflow-hidden" style={{ background: 'var(--bg)' }}>
+      {showSplash && <SplashScreen onDone={() => setShowSplash(false)} />}
       {showOnboarding && <Onboarding onDone={handleOnboardingDone} />}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <div className="flex-1 flex flex-col min-w-0">
