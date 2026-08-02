@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect, useMemo } from 'react'
 import CoraRobot from '../components/CoraRobot'
+import ConversationPlayer from '../components/ConversationPlayer'
 import { useTheme } from '../hooks/useTheme'
 import { getApiKey, askCoraResources } from '../services/claudeApi'
+import { audioConversations } from '../data/audioConversations'
 
 /* ─── DATA ────────────────────────────────────────────────────────── */
 
@@ -798,6 +800,29 @@ export default function HelpCenter() {
                   <p className="text-xs text-[#6B4EF3] font-semibold mt-3 group-hover:underline">Open →</p>
                 </div>
               </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Listen & Learn ── */}
+      <section className="px-6 py-10" style={{ background: 'var(--bg)', borderTop: '1.5px solid var(--border)' }}>
+        <div className="max-w-7xl mx-auto">
+          <div className="flex items-start justify-between mb-6 gap-4">
+            <div>
+              <h2 className="font-bold text-lg" style={{ color: 'var(--text)' }}>Listen & Learn</h2>
+              <p className="text-sm mt-0.5" style={{ color: 'var(--text-3)' }}>
+                AI-voiced calls showing de-escalation in real time. Follow the transcript as you listen.
+              </p>
+            </div>
+            <span className="shrink-0 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-widest"
+              style={{ background: 'rgba(107,78,243,0.12)', color: '#6B4EF3', border: '1px solid rgba(107,78,243,0.20)' }}>
+              AI Voices
+            </span>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {audioConversations.map(conv => (
+              <ConversationPlayer key={conv.id} conversation={conv} />
             ))}
           </div>
         </div>
