@@ -46,7 +46,7 @@ export async function askCora(messages, onChunk) {
 }
 
 export async function streamClaude({ system, messages, onChunk, maxTokens = 600 }) {
-  const key = getApiKey()
+  const key = getApiKey().replace(/[^\x20-\x7E]/g, '') // strip non-printable / non-ASCII
   if (!key) throw new Error('NO_KEY')
 
   const response = await fetch('https://api.anthropic.com/v1/messages', {

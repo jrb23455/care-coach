@@ -13,36 +13,96 @@ const categories = [
     title: 'De-escalate Rude Customers',
     desc: 'Turn hostility into conversation with proven techniques',
     prompt: 'How do I handle a customer who is being rude or disrespectful?',
+    type: 'GUIDE',
+    content: [
+      { heading: 'Why "rude" is usually fear in disguise', body: "Most customers who get hostile aren't bad people — they're scared, overwhelmed, or feel powerless. A rate increase, a claim denial, a billing surprise — these feel like financial threats. Remembering this doesn't excuse the behavior, but it completely changes how you respond to it. You're not dealing with a bad person. You're dealing with someone who's afraid." },
+      { heading: 'The 5-second rule — before you say a word', body: "When a customer opens with aggression, your instinct is to defend or explain. Don't. Give yourself 5 seconds. Lower your shoulders. Slow your breathing. The contrast between their energy and your calm is your most powerful tool — use it intentionally. Silence is not weakness here. It's composure." },
+      { heading: 'Name the behavior, not the person', body: "Don't say \"you're being rude\" — say \"I need us to be able to have this conversation.\" This sets a clear limit without making it personal. Said calmly and without apology, it works far better than matching energy or going completely silent. The key is to say it without heat — like you're stating a fact, not delivering a verdict." },
+      { heading: 'Phrases that work when someone is hostile', body: "\"I hear how frustrated you are, and I want to get this right for you.\"\n\"I understand you're upset — let me pull up your account right now.\"\n\"I want to help you resolve this, and I also need us to be able to talk.\"\nLower your voice each time. The quieter you get, the louder they have to get to maintain dominance — and most people stop." },
+      { heading: 'Setting limits that actually hold', body: "First limit: \"I want to help you, and I need us to be able to have this conversation — can we keep the language professional?\"\nIf it continues: \"I'm going to need to pause our call if this continues. I genuinely want to resolve this for you.\"\nIf it continues after that: document it, end the call professionally, and tell your market leader the same day." },
+      { heading: 'When the call crosses into abuse', body: "There is a difference between venting and abuse. You don't have to stay on an abusive call. Your script: \"I want to help you, and I'm not able to continue this conversation right now. I'm going to end the call, and I'll document that we spoke today.\" Say it. Do it. Document it. Every time." },
+    ],
   },
   {
     icon: '💭', gradient: 'from-orange-400 to-amber-500',
     title: 'What to Say (Examples)',
     desc: 'Exact scripts and phrases ready to use right now',
     prompt: 'Give me examples of what to say to a frustrated or difficult customer.',
+    type: 'TOOL',
+    phrases: [
+      { situation: 'Opening an angry call', phrase: '"I can hear that you\'re frustrated, and I want to make this right. Let me pull up your account right now."', why: "Acknowledges the emotion before anything else. Signals you're already moving. Don't make them ask you to look it up." },
+      { situation: 'Before you explain anything', phrase: '"Before I walk you through the details — help me understand what happened from your side."', why: "Customers who feel heard accept explanations far more readily. Getting their version first also prevents you from answering the wrong question." },
+      { situation: 'When they\'re yelling', phrase: '"I hear you. Let me make sure I get every detail of this right."', why: "Short, calm, action-oriented. Lower your voice as you say it. Don't match their energy — contrast it." },
+      { situation: 'After they\'ve vented completely', phrase: '"Thank you for walking me through all of that. Here\'s what I want to do..."', why: "This transition signals you listened and you're taking ownership. Never rush past the venting — wait for them to fully stop." },
+      { situation: 'When explaining a rate increase', phrase: '"Before I explain the numbers, I want to make sure I understand — you saw this on your bill with no warning?"', why: "Confirms the experience before the explanation. Customers accept rate increases far better when they feel heard first." },
+      { situation: 'After a claim denial', phrase: '"You have the right to a full written explanation — and the right to request a formal review. I want to make sure you know both options before we go any further."', why: "'You have rights' shifts the customer from powerless to having options. It's often the most calming thing you can say in a denial call." },
+      { situation: 'When you need more time to check', phrase: '"I want to give you the right answer, not just a fast one — can I put you on a brief hold?"', why: "Frames the hold as being in their interest. Almost always accepted. Never just put someone on hold without this framing." },
+      { situation: 'When they threaten to cancel', phrase: '"You\'ve been with us a long time. Before you make any decision, can I understand what would actually make this right for you?"', why: "Leads with the relationship. Asking what they want often resolves the threat entirely — most cancellation threats are really a request to be taken seriously." },
+      { situation: 'Setting a limit on the conversation', phrase: '"I want to help you resolve this, and I also need us to be able to have that conversation."', why: "Clear limit without confrontation. Say it calmly, without apology. The steadiness of your delivery is what makes it land." },
+      { situation: 'Closing a hard call', phrase: '"Before we hang up — I want to make sure you feel good about where we\'ve landed. Is there anything else I can clarify?"', why: "Opens the door to lingering concerns without implying the resolution was incomplete. Ends on a collaborative note." },
+    ],
   },
   {
     icon: '✏️', gradient: 'from-yellow-400 to-lime-500',
     title: 'Objections & Pushback',
     desc: 'Handle resistance without losing control of the call',
     prompt: 'How do I handle customer objections and pushback effectively?',
+    type: 'TOOL',
+    phrases: [
+      { situation: '"My rate went up and I don\'t understand why"', phrase: '"A change that size deserves a real explanation, not a letter. Let me walk you through exactly what changed and what your options are from here."', why: "Validates that they deserve an explanation before you give it. Customers who feel entitled to information are more receptive to hearing it." },
+      { situation: '"I\'ve been a loyal customer — this is how you treat me?"', phrase: '"Your history with us matters, and I hear you. Let me look at your full account — I want to make sure we\'re actually doing right by you."', why: "Acknowledges the relationship first. 'I want to make sure we're doing right by you' signals you're on their side." },
+      { situation: '"The competitor offers the same coverage for less"', phrase: '"That\'s worth understanding. Can you tell me exactly what you saw? Sometimes the coverage isn\'t quite the same — I want to make sure you\'re comparing the same protection."', why: "Doesn't dismiss the claim or immediately counter it. Asking for specifics often reveals the comparison isn't apples-to-apples." },
+      { situation: '"Just send me something in writing"', phrase: '"Absolutely — that\'s a reasonable request. I can email you a full summary of everything we discussed. What\'s the best address?"', why: "Agree immediately. A customer who wants things in writing is paying attention — that's actually a sign of engagement." },
+      { situation: '"You should have told me about this earlier"', phrase: '"You\'re right, and I\'m sorry you found out this way. That\'s on us. What I can do now is walk you through everything and make sure you have a full picture going forward."', why: "Own it without excessive apology. 'That's on us' is specific accountability. 'What I can do now' moves to solutions without dismissing the complaint." },
+      { situation: '"I don\'t have time for this right now"', phrase: '"I completely understand — can I call you back at a specific time? I\'ll have everything pulled up and ready so we don\'t waste a minute."', why: "Respects their time immediately. Offering a callback with everything ready removes the fear they'll have to start over." },
+      { situation: '"I\'ve already made up my mind"', phrase: '"I respect that. Before we end the call, can I make sure you have all the information? There may be an option you haven\'t seen yet — takes two minutes."', why: "Doesn't fight the decision. The 'two minutes' framing lowers the cost of listening. Many 'decided' customers aren't as decided as they say." },
+      { situation: '"This is fraud" / "I\'ll report you" / "I\'ll sue"', phrase: '"I understand you feel strongly about this, and I want to make sure your concern is fully documented and gets in front of the right people."', why: "Calm, non-defensive, signals accountability. 'Documented' is the key word — never match this energy. Your composure is the whole ballgame." },
+    ],
   },
   {
     icon: '📞', gradient: 'from-sky-400 to-blue-600',
     title: 'Call Flow & Best Practices',
     desc: 'Structure any difficult call from open to close',
     prompt: 'What are best practices for managing the flow of a difficult call?',
+    type: 'GUIDE',
+    content: [
+      { heading: 'The first 30 seconds determine the whole call', body: "Before you say a word about the issue, establish three things: your name, that you're pulling up their account, and that you're ready to listen. \"Hi, this is [name] — I'm opening your account right now. Tell me what's going on.\" That opening signals competence and attention before the customer has a reason to doubt either." },
+      { heading: 'Discovery before diagnosis', body: "Never assume you know the real issue from the first sentence. \"My bill is wrong\" could mean a billing error, a rate increase, a coverage change, or a payment that didn't post. Ask: \"Can you walk me through exactly what you're seeing?\" Get the full picture before you start solving — you're far less likely to answer the wrong question." },
+      { heading: 'Managing emotional spikes mid-call', body: "When the temperature rises, do three things: lower your own voice, slow your pace, and let them finish completely before responding. Don't interrupt to reassure — wait. Then: \"I hear you. Let me make sure I have this right...\" The pause and reflection resets the temperature more reliably than any single phrase." },
+      { heading: 'Lead with CAN, never CAN\'T', body: "Never open with what you can't do. \"I can't change the rate\" closes the door. \"What I can do right now is run a full coverage review to see if there are ways to bring that number down\" opens one. When something is outside your authority, name what you're actively doing to move it forward — not just that it's outside your authority." },
+      { heading: 'Confirming the resolution — don\'t rush the close', body: "Before hanging up, repeat the resolution back clearly: what was decided, who does what, and by when. Then ask: \"Is there anything else I can clarify before we wrap up?\" End with something human — not a script close. A customer who ends a hard call feeling respected is far more likely to stay." },
+      { heading: 'After the call — what to document', body: "Log: the issue, what you said, any commitments you made (especially time-specific ones), and the customer's emotional state at close. If there's any chance of escalation, note it explicitly. Good notes protect you, protect the customer, and mean the next agent they talk to doesn't start from zero." },
+    ],
   },
   {
     icon: '🧠', gradient: 'from-teal-400 to-emerald-500',
     title: 'Emotional Control & Mindset',
     desc: 'Stay calm, focused, and confident under pressure',
     prompt: 'How do I stay calm and in control emotionally on a tough call?',
+    type: 'GUIDE',
+    content: [
+      { heading: 'Before a hard call — the 2-minute reset', body: "If you know a call will be difficult, take two minutes before picking up: slow breath in for 4 counts, hold for 4, out for 6. Stretch your shoulders. Read the account notes. Remind yourself: their anger is about their situation, not you personally. Walk into the call having already made that separation." },
+      { heading: 'In-call anchor: the 1-second pause', body: "The most reliable in-call tool is a deliberate 1-second pause after the customer finishes — even when you already know what to say. It communicates you're listening, not just waiting. It also prevents you from interrupting, which is the most common way agents accidentally escalate calls." },
+      { heading: 'The "not about me" reframe', body: "When a customer says \"you people are useless\" or \"you don't care\" — they're not talking about you. They're describing how they feel about a system that let them down. The moment you take it personally, your voice tightens and they feel it. Reframe: they're telling you how much this situation matters to them. Use that information." },
+      { heading: 'Managing your physical state mid-call', body: "Your body affects your voice. If you feel yourself getting tense: unclench your jaw, drop your shoulders, plant both feet on the floor. Physical grounding changes your vocal tone — and a customer who can't see you can absolutely hear when you're stressed, which raises their anxiety too." },
+      { heading: 'After a brutal call — the 60-second decompress', body: "Before your next call: walk away briefly, get water, take three slow breaths. Say to yourself: \"That was hard. I handled it. Next call starts clean.\" The next customer has nothing to do with the last one — they deserve a version of you who hasn't carried that call in. Give yourself 60 seconds to make that transfer." },
+      { heading: 'Building long-term resilience', body: "Keep a small \"win file\" — a list of calls you handled well, moments you de-escalated something difficult, customers who thanked you. Difficult calls are a skill, not a personality attack. The agents who burn out are usually the ones who never gave themselves credit for what they handled. Every hard call you navigate is evidence you can do this." },
+    ],
   },
   {
     icon: '🛡️', gradient: 'from-violet-500 to-purple-600',
     title: 'Policies & Escalations',
     desc: 'Know your authority and when to involve your market leader',
     prompt: 'What do I need to know about escalating to my market leader?',
+    type: 'GUIDE',
+    content: [
+      { heading: 'Know your authority limits before the call starts', body: "Before a difficult call, know what you can decide on your own: billing adjustments you're authorized to make, credits or waivers within your threshold, and the specific policy language you can reference. When you're unclear on your authority, it shows — and customers feel it. Clarity before the call prevents hesitation during it." },
+      { heading: 'When to involve your market leader', body: "Escalate when: (1) a customer specifically requests a manager and you've genuinely tried to resolve it, (2) the issue requires authorization beyond your level, (3) the call becomes abusive or threatening, or (4) there are legal or compliance implications. Escalating is not failure — it's using the right tool for the right problem." },
+      { heading: 'The market leader protocol — what to promise', body: "Market leaders cannot join calls in real time or take live transfers — they handle callbacks. When you commit to a market leader callback, give a specific time window, not \"sometime today.\" And always brief your market leader before they call, so the customer doesn't have to repeat their entire situation. The briefing is part of the escalation." },
+      { heading: 'How to brief your market leader effectively', body: "Give them: (1) what the customer wanted, (2) what you offered, (3) why it didn't resolve, (4) the customer's emotional state, and (5) any commitments you already made. A 90-second brief done well means the market leader can open the callback in control. A bad brief means the customer starts over — which often makes things worse." },
+      { heading: 'Documenting sensitive or escalated calls', body: "Log: the issue, your specific offers and their responses, any commitments with exact times, whether you escalated and why, and the customer's state at end of call. If there's any mention of legal action, recording, or a formal complaint — note it explicitly and flag your market leader that same day, not later." },
+      { heading: 'When a call becomes abusive', body: "You don't have to endure abusive calls. Your sequence: name it calmly (\"I need us to keep the language professional\"), give one warning (\"I'll need to end this call if it continues\"), then end it if necessary (\"I'm going to end the call now — I've documented our conversation\"). This is professionalism, not failure. Always tell your market leader the same day." },
+    ],
   },
 ]
 
@@ -376,7 +436,7 @@ function ChecklistResource({ items }) {
   )
 }
 
-function ResourceModal({ resource, onClose }) {
+function ResourceModal({ resource, onClose, onAskCora }) {
   if (!resource) return null
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
@@ -452,6 +512,15 @@ function ResourceModal({ resource, onClose }) {
             </div>
           ))}
           {resource.items && <ChecklistResource items={resource.items} />}
+          {onAskCora && (
+            <div className="mt-6 pt-5" style={{ borderTop: '1px solid var(--border)' }}>
+              <button onClick={onAskCora}
+                className="w-full text-sm font-bold py-3 rounded-xl text-white transition-all hover:opacity-90"
+                style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)', boxShadow: '0 4px 14px rgba(123,63,242,0.30)' }}>
+                Have more questions? Ask Cora →
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
@@ -471,6 +540,7 @@ export default function HelpCenter() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchPanel, setSearchPanel] = useState(null)
   const [openResource, setOpenResource] = useState(null)
+  const [openCategory, setOpenCategory] = useState(null)
 
   const chatEndRef = useRef(null)
   const chatRef = useRef(null)
@@ -522,8 +592,7 @@ export default function HelpCenter() {
   }
 
   function handleCategory(cat) {
-    send(cat.prompt)
-    setTimeout(() => chatRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100)
+    setOpenCategory(cat)
   }
 
   function handleSearchClick(r) {
@@ -849,6 +918,17 @@ export default function HelpCenter() {
 
       {openResource !== null && (
         <ResourceModal resource={resourceContent[openResource]} onClose={() => setOpenResource(null)} />
+      )}
+      {openCategory && (
+        <ResourceModal
+          resource={openCategory}
+          onClose={() => setOpenCategory(null)}
+          onAskCora={() => {
+            setOpenCategory(null)
+            send(openCategory.prompt)
+            setTimeout(() => chatRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 150)
+          }}
+        />
       )}
     </div>
   )
