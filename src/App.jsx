@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Sidebar from './components/Sidebar'
 import TopBar from './components/TopBar'
 import Home from './pages/Home'
@@ -10,9 +10,10 @@ import { useTheme } from './hooks/useTheme'
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const { dark, toggle } = useTheme()
+  const mainRef = useRef(null)
 
   useEffect(() => {
-    window.scrollTo(0, 0)
+    mainRef.current?.scrollTo(0, 0)
   }, [currentPage])
 
   return (
@@ -20,7 +21,7 @@ export default function App() {
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <div className="flex-1 flex flex-col min-w-0">
         <TopBar currentPage={currentPage} setCurrentPage={setCurrentPage} dark={dark} onToggleTheme={toggle} />
-        <main className={`flex-1 min-h-0 ${currentPage === 'live' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto'}`}>
+        <main ref={mainRef} className={`flex-1 min-h-0 ${currentPage === 'live' ? 'flex flex-col overflow-hidden' : 'overflow-y-auto'}`}>
           {currentPage === 'home'     && <Home setCurrentPage={setCurrentPage} />}
           {currentPage === 'help'     && <HelpCenter setCurrentPage={setCurrentPage} />}
           {currentPage === 'training' && <Training />}
