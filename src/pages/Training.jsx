@@ -330,7 +330,7 @@ export default function Training() {
     <div className="max-w-3xl mx-auto px-4 py-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-4">
-          <CoraRobot size={64} pose="thumbs" />
+          <CoraRobot size={64} pose="present" />
           <div>
             <h1 className="text-2xl font-black" style={{ color: 'var(--text)' }}>Training Center</h1>
             <p className="text-sm mt-0.5 font-semibold" style={{ color: 'var(--text-2)' }}>Practice real customer scenarios with scored feedback</p>

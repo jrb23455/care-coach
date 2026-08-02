@@ -704,7 +704,7 @@ export default function HelpCenter() {
               style={bubbleStyle}>
               <p className="text-xs" style={{ color: 'var(--text)' }}>Ask me anything about handling difficult customers in insurance sales.</p>
             </div>
-            <CoraRobot size={170} pose="thumbs" />
+            <CoraRobot size={170} pose="present" />
           </div>
         </div>
 
