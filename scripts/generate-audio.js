@@ -20,7 +20,7 @@ if (!API_KEY) {
 }
 
 const VOICES = {
-  customer: { id: 'TxGEqnHWrfWFTfGW9XjX', stability: 0.12, style: 0.80, similarity: 0.85 }, // Josh — American, high expressiveness
+  customer: { id: 'y0s2ExEMuum3muUnA6Zd', stability: 0.12, style: 0.80, similarity: 0.85 },
   agent:    { id: '21m00Tcm4TlvDq8ikWAM', stability: 0.68, style: 0.10, similarity: 0.75 }, // Rachel — warm, professional
 }
 const MODEL = 'eleven_turbo_v2'
