@@ -324,7 +324,7 @@ export default function Home({ setCurrentPage }) {
         <div className="space-y-4">
           <div className="rounded-3xl overflow-hidden shadow-lg" style={{ background: 'linear-gradient(165deg, #0f0b30 0%, #1a0850 100%)' }}>
             <div className="flex justify-center pt-5 pb-2">
-              <CoraRobot size={100} pose="think" />
+              <span className="text-4xl">💡</span>
             </div>
             <div className="px-4 pb-4">
               <div className="text-[10px] font-black text-purple-400 uppercase tracking-widest mb-2">Cora's Tip</div>

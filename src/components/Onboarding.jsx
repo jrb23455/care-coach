@@ -26,7 +26,7 @@ export default function Onboarding({ onDone }) {
         {step === 0 && (
           <div className="text-center">
             <div className="flex justify-center mb-5">
-              <CoraRobot size={120} pose="wave" shadow={false} />
+              <CoraRobot size={120} pose="thumbs" shadow={false} />
             </div>
             <h1 className="text-2xl font-black mb-2" style={{ color: 'var(--text)' }}>Welcome to CARE Coach!</h1>
             <p className="text-sm leading-relaxed mb-6" style={{ color: 'var(--text-2)' }}>

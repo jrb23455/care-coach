@@ -149,7 +149,7 @@ function ApiKeySetup({ onSave }) {
       <div className="max-w-md w-full">
         <div className="text-center mb-8">
           <div className="flex justify-center mb-4">
-            <CoraRobot size={110} pose="wave" />
+            <CoraRobot size={110} pose="thumbs" />
           </div>
           <h1 className="text-2xl font-black mb-2" style={{ color: 'var(--text)' }}>Connect Cora's Brain</h1>
           <p className="text-sm leading-relaxed font-semibold" style={{ color: 'var(--text-2)' }}>
@@ -324,7 +324,7 @@ export default function LiveAdvice() {
           {messages.length === 0 && !isLoading && (
             <div className="text-center py-10">
               <div className="flex justify-center mb-4">
-                <CoraRobot size={120} pose="wink" />
+                <CoraRobot size={120} pose="thumbs" />
               </div>
               <h2 className="text-lg font-black mb-2" style={{ color: 'var(--text)' }}>Ready to coach</h2>
               <p className="text-sm font-semibold max-w-sm mx-auto leading-relaxed" style={{ color: 'var(--text-2)' }}>
@@ -358,7 +358,6 @@ export default function LiveAdvice() {
             <div className="flex justify-start mb-4">
               <div className="flex items-center gap-2 px-5 py-3.5 rounded-2xl shadow-sm"
                 style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
-                <CoraRobot size={24} shadow={false} />
                 <span className="text-sm font-semibold" style={{ color: 'var(--text-2)' }}>Cora is thinking</span>
                 <BounceDots />
               </div>

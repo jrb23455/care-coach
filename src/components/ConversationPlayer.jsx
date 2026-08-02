@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
-import CoraRobot from './CoraRobot'
 
 function CustomerAvatar({ active }) {
   return (
@@ -21,7 +20,7 @@ function AgentAvatar({ active }) {
         background: active ? 'linear-gradient(135deg, #7B3FF2, #a855f7)' : 'var(--border)',
         boxShadow: active ? '0 0 0 2px #7B3FF250' : 'none',
       }}>
-      <CoraRobot size={36} pose="neutral" shadow={false} />
+      <span className="text-sm font-black text-white">C</span>
     </div>
   )
 }

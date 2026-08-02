@@ -1,6 +1,5 @@
 import { useProgress } from '../hooks/useProgress'
 import { practiceScenarios } from '../data/practiceScenarios'
-import CoraRobot from './CoraRobot'
 
 const NAV = [
   {
@@ -56,8 +55,8 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
           onClick={() => setCurrentPage('home')}
           className="flex items-center gap-2.5 group w-full"
         >
-          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 overflow-hidden" style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)' }}>
-            <CoraRobot pose="wink" size={30} shadow={false} />
+          <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0 text-base font-black text-white" style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)' }}>
+            ✦
           </div>
           <div>
             <div className="text-white font-black text-sm leading-none tracking-tight">CARE Coach</div>
@@ -101,10 +100,9 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
           onClick={() => setCurrentPage('live')}
           className="flex flex-col items-center gap-1 group"
         >
-          <div className="relative">
-            <div className="absolute inset-0 rounded-full blur-xl opacity-40" style={{ background: 'radial-gradient(circle, #7B3FF2, transparent)' }} />
-            <CoraRobot size={72} />
-            <span className="absolute top-1 right-1 w-2.5 h-2.5 rounded-full bg-green-400 border-2 border-[#0D0A2E] animate-pulse" />
+          <div className="relative w-14 h-14 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)' }}>
+            <span className="text-2xl">🤖</span>
+            <span className="absolute top-0.5 right-0.5 w-2.5 h-2.5 rounded-full bg-green-400 border-2 border-[#0D0A2E] animate-pulse" />
           </div>
           <span className="text-[10px] text-purple-400 font-black uppercase tracking-widest group-hover:text-white transition-colors">Ask Cora</span>
         </button>
