@@ -68,7 +68,7 @@ const RECOMMENDED = [
   {
     type: 'VIDEO', typeColor: '#f59e0b', bg: 'rgba(245,158,11,0.08)',
     title: 'How to Handle Angry Customers', icon: '▶️', meta: '~10 min',
-    modal: { title: 'How to Handle Angry Customers', type: 'video', videoUrl: 'https://www.youtube.com/embed/ZXH_HTEpqOU' },
+    modal: { title: 'How to Handle Angry Customers', type: 'video', videoUrl: 'https://www.youtube.com/embed/1e7OH-veEUY' },
   },
   {
     type: 'QUICK TIP', typeColor: '#ec4899', bg: 'rgba(236,72,153,0.08)',

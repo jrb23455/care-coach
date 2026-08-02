@@ -129,7 +129,7 @@ const resourceContent = [
     type: 'VIDEO', typeColor: 'text-red-500', icon: '▶️',
     gradient: 'from-red-500 to-rose-600',
     title: 'Handling Angry Customers: Real Techniques', meta: '~10 min · YouTube',
-    videoUrl: 'https://www.youtube.com/embed/ZXH_HTEpqOU',
+    videoUrl: 'https://www.youtube.com/embed/1e7OH-veEUY',
   },
   {
     type: 'GUIDE', typeColor: 'text-blue-600', icon: '📖',
