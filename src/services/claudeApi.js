@@ -99,3 +99,15 @@ export async function streamClaude({ system, messages, onChunk, maxTokens = 600 
 
   return fullText
 }
+
+const RESOURCES_SYSTEM = `You are Cora, a friendly AI coach for insurance sales agents. Answer questions about handling difficult customers, de-escalation techniques, objection handling, call flow, and emotional resilience in insurance sales. Keep answers concise (2–4 sentences), practical, and warm. Respond conversationally — no bullet lists, no markdown.`
+
+export async function askCoraResources(messages, onChunk) {
+  return streamClaude({ system: RESOURCES_SYSTEM, messages: messages.slice(-6), onChunk, maxTokens: 220 })
+}
+
+const SUMMARY_SYSTEM = `Summarize this coaching session in 3–4 bullet points. Start with "Here's what you handled today:" then list bullet points (one line each, starting with •). End with one brief sentence of encouragement. Be specific to what was actually discussed.`
+
+export async function summarizeSession(messages, onChunk) {
+  return streamClaude({ system: SUMMARY_SYSTEM, messages, onChunk, maxTokens: 200 })
+}

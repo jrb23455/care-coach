@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useMemo } from 'react'
 import { practiceScenarios } from '../data/practiceScenarios'
 import { useProgress } from '../hooks/useProgress'
 import ProgressRing from '../components/ProgressRing'
@@ -12,13 +12,25 @@ const DIFFICULTY_COLOR = { beginner: '#10B981', intermediate: '#F59E0B', advance
 const DIFFICULTY_BG    = { beginner: 'rgba(16,185,129,0.12)', intermediate: 'rgba(245,158,11,0.12)', advanced: 'rgba(239,68,68,0.12)' }
 
 /* ── Scenario browser ── */
-function ScenarioBrowser({ prog, onStart }) {
-  const [filter, setFilter] = useState('all')
+function ScenarioBrowser({ prog, onStart, initialFilter = 'all' }) {
+  const [filter, setFilter] = useState(initialFilter)
+  const [search, setSearch] = useState('')
   const pillars = ['all', 'understand', 'deescalate', 'respond', 'resolve']
-  const shown = filter === 'all' ? practiceScenarios : practiceScenarios.filter(s => s.pillar === filter)
+  const shown = practiceScenarios
+    .filter(s => filter === 'all' || s.pillar === filter)
+    .filter(s => !search ||
+      s.title.toLowerCase().includes(search.toLowerCase()) ||
+      s.customerLine.toLowerCase().includes(search.toLowerCase()))
 
   return (
     <div>
+      <input
+        value={search}
+        onChange={e => setSearch(e.target.value)}
+        placeholder="Search scenarios…"
+        className="w-full rounded-2xl px-4 py-2.5 text-sm font-semibold focus:outline-none transition-all mb-3"
+        style={{ background: 'var(--bg)', border: '1.5px solid var(--border)', color: 'var(--text)' }}
+      />
       <div className="flex gap-2 flex-wrap mb-6">
         {pillars.map(p => {
           const active = filter === p
@@ -33,10 +45,18 @@ function ScenarioBrowser({ prog, onStart }) {
         })}
       </div>
 
+      {shown.length === 0 && (
+        <div className="text-center py-12" style={{ color: 'var(--text-3)' }}>
+          <div className="text-3xl mb-2">🔍</div>
+          <p className="text-sm font-semibold">No scenarios match "{search}"</p>
+        </div>
+      )}
+
       <div className="grid gap-3">
         {shown.map(s => {
           const done = prog.completed[s.id]
           const pc = PILLAR_COLORS[s.pillar]
+          const history = done?.history
           return (
             <div key={s.id} onClick={() => onStart(s)}
               className="rounded-2xl p-4 flex items-start justify-between gap-4 hover:shadow-md transition-all cursor-pointer hover:scale-[1.01]"
@@ -48,12 +68,26 @@ function ScenarioBrowser({ prog, onStart }) {
                   {done && (
                     <span className="text-xs font-black text-green-500 flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: 'rgba(16,185,129,0.10)' }}>
                       <svg viewBox="0 0 16 16" width="10" height="10" fill="currentColor"><path d="M13.5 2.5l-7 7-3-3L2 8l4.5 4.5 8.5-8.5z"/></svg>
-                      {done.score}pts
+                      Best: {done.score}pts
                     </span>
                   )}
                 </div>
                 <div className="font-black" style={{ color: 'var(--text)' }}>{s.title}</div>
-                <div className="text-sm mt-0.5 line-clamp-1 font-semibold" style={{ color: 'var(--text-2)' }}>"{s.customerLine.slice(0, 80)}…"</div>
+                <div className="text-sm mt-0.5 line-clamp-1 font-semibold" style={{ color: 'var(--text-2)' }}>"{s.customerLine.length > 80 ? s.customerLine.slice(0, 80) + '…' : s.customerLine}"</div>
+                {history && history.length > 1 && (
+                  <div className="flex items-center gap-1 mt-2">
+                    <span className="text-[9px] font-bold mr-0.5" style={{ color: 'var(--text-3)' }}>Attempts:</span>
+                    {history.slice(-5).map((h, j) => (
+                      <span key={j} className="text-[9px] font-black px-1.5 py-0.5 rounded-md"
+                        style={{
+                          background: h.score >= 80 ? 'rgba(16,185,129,0.15)' : h.score >= 50 ? 'rgba(245,158,11,0.15)' : 'rgba(239,68,68,0.15)',
+                          color: h.score >= 80 ? '#10B981' : h.score >= 50 ? '#F59E0B' : '#EF4444',
+                        }}>
+                        {h.score}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
               <div className="text-right shrink-0">
                 <div className="text-xs font-black mb-2" style={{ color: pc }}>{done ? '+0–5 XP' : `+${s.xp} XP`}</div>
@@ -84,7 +118,7 @@ function ScenarioPlayer({ scenario, prevBest, onComplete, onBack }) {
     if (phase !== 'question') return
     timerRef.current = setInterval(() => {
       setTimeLeft(t => {
-        if (t <= 1) { clearInterval(timerRef.current); setTimedOut(true); setPhase('result'); setChosen(scenario.options[0]); return 0 }
+        if (t <= 1) { clearInterval(timerRef.current); setTimedOut(true); setPhase('result'); setChosen({ score: 0, text: '(no response)', feedback: "You didn't respond in time. On a real call the customer is still waiting — speed is part of the skill." }); return 0 }
         return t - 1
       })
     }, 1000)
@@ -144,7 +178,7 @@ function ScenarioPlayer({ scenario, prevBest, onComplete, onBack }) {
             <div className="text-sm font-bold" style={{ color: 'var(--text-2)' }}>What do you say?</div>
             <div className="flex items-center gap-2">
               <svg viewBox="0 0 16 16" width="14" height="14" fill={timerColor}><circle cx="8" cy="8" r="7" fill="none" stroke={timerColor} strokeWidth="2"/><path d="M8 4v4l3 2" stroke={timerColor} strokeWidth="1.5" strokeLinecap="round" fill="none"/></svg>
-              <span className="text-sm font-black" style={{ color: timerColor }}>{timeLeft}s</span>
+              <span className="text-sm font-black" style={{ color: timerColor }} aria-live="polite" aria-atomic="true">{timeLeft}s</span>
             </div>
           </div>
           <div className="rounded-2xl p-4 mb-5 italic font-semibold" style={{ color: 'var(--text)', background: 'rgba(245,158,11,0.10)', border: '1.5px solid rgba(245,158,11,0.20)' }}>
@@ -202,9 +236,15 @@ function ScenarioPlayer({ scenario, prevBest, onComplete, onBack }) {
             <div className="text-xs font-black text-green-500 mb-2">BEST ANSWER:</div>
             <div className="italic" style={{ color: 'var(--text)' }}>"{scenario.expertResponse}"</div>
           </div>
-          <div className="text-sm mb-6" style={{ color: 'var(--text-2)' }}>
-            Notice how this response validates the emotion, names the specific issue, and moves immediately toward a concrete next step — without apologizing unnecessarily.
-          </div>
+          {(() => {
+            const bestOpt = scenario.options.reduce((a, b) => a.score > b.score ? a : b)
+            return bestOpt?.feedback ? (
+              <div className="rounded-2xl p-4 mb-4" style={{ background: 'rgba(123,63,242,0.07)', border: '1.5px solid rgba(123,63,242,0.15)' }}>
+                <div className="text-xs font-black text-purple-400 mb-1.5">WHY IT WORKS:</div>
+                <div className="text-sm leading-relaxed" style={{ color: 'var(--text-2)' }}>{bestOpt.feedback}</div>
+              </div>
+            ) : null
+          })()}
           <div className="flex gap-3">
             <button onClick={onBack} className="flex-1 py-3 rounded-2xl font-black transition-all hover:scale-[1.01]"
               style={{ background: 'var(--bg)', border: '2px solid var(--border)', color: 'var(--text)' }}>
@@ -256,6 +296,21 @@ export default function Training() {
   const { prog, completeScenario, xpLevel, xpInLevel } = useProgress()
   const [activeScenario, setActiveScenario] = useState(null)
   const [lastResult, setLastResult] = useState(null)
+
+  const initialFilter = useMemo(() => {
+    const f = sessionStorage.getItem('training_filter')
+    if (f) sessionStorage.removeItem('training_filter')
+    return f || 'all'
+  }, [])
+
+  useEffect(() => {
+    const autoId = sessionStorage.getItem('training_auto_scenario')
+    if (autoId) {
+      sessionStorage.removeItem('training_auto_scenario')
+      const scenario = practiceScenarios.find(s => s.id === autoId)
+      if (scenario) setActiveScenario(scenario)
+    }
+  }, [])
 
   function handleComplete(score) {
     if (activeScenario) {
@@ -312,7 +367,7 @@ export default function Training() {
       ) : (
         <>
           <PillarSummary prog={prog} onStart={setActiveScenario} />
-          <ScenarioBrowser prog={prog} onStart={setActiveScenario} />
+          <ScenarioBrowser prog={prog} onStart={setActiveScenario} initialFilter={initialFilter} />
         </>
       )}
     </div>

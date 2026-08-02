@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { getApiKey, setApiKey, clearApiKey, askCora } from '../services/claudeApi'
+import { getApiKey, setApiKey, clearApiKey, askCora, summarizeSession } from '../services/claudeApi'
 import CoraRobot from '../components/CoraRobot'
 
 const QUICK_SITUATIONS = [
@@ -168,7 +168,7 @@ function ApiKeySetup({ onSave }) {
             placeholder="sk-ant-api03-..."
             autoFocus
             className="w-full border rounded-2xl px-4 py-3 text-sm font-mono focus:outline-none transition-all"
-            style={{ borderColor: error ? '#ef4444' : '#ede9fe', boxShadow: 'none' }}
+            style={{ borderColor: error ? '#ef4444' : 'var(--border)', boxShadow: 'none' }}
           />
           {error && <p className="text-red-500 text-xs mt-2 font-bold">{error}</p>}
 
@@ -202,6 +202,8 @@ export default function LiveAdvice() {
   const [isLoading, setIsLoading]     = useState(false)
   const [streamingText, setStreamingText] = useState('')
   const [error, setError]             = useState('')
+  const [summary, setSummary]         = useState('')
+  const [isSummarizing, setIsSummarizing] = useState(false)
   const bottomRef = useRef(null)
   const inputRef  = useRef(null)
 
@@ -238,11 +240,25 @@ export default function LiveAdvice() {
     }
   }, [messages, isLoading])
 
+  async function summarize() {
+    if (isSummarizing || messages.length < 2) return
+    setIsSummarizing(true)
+    setSummary('')
+    const apiMsgs = messages.map(m => ({ role: m.role, content: m.content }))
+    try {
+      await summarizeSession(apiMsgs, chunk => setSummary(chunk))
+    } catch {
+      setSummary('Could not generate summary — check your API key.')
+    }
+    setIsSummarizing(false)
+  }
+
   function newCall() {
     setMessages([])
     setStreamingText('')
     setError('')
     setInput('')
+    setSummary('')
     setTimeout(() => inputRef.current?.focus(), 50)
   }
 
@@ -266,11 +282,25 @@ export default function LiveAdvice() {
               Describe what's happening → get the exact words to say right now
             </span>
           </div>
-          <button onClick={newCall}
-            className="text-sm font-black px-4 py-2 rounded-2xl transition-all hover:scale-105"
-            style={{ background: 'rgba(123,63,242,0.09)', color: '#7B3FF2' }}>
-            + New Call
-          </button>
+          <div className="flex items-center gap-2">
+            {messages.length >= 2 && (
+              <button onClick={summarize} disabled={isSummarizing}
+                className="text-sm font-black px-4 py-2 rounded-2xl transition-all hover:scale-105 disabled:opacity-50"
+                style={{ background: 'rgba(16,185,129,0.09)', color: '#10b981' }}>
+                {isSummarizing ? 'Summarizing…' : '📋 Summarize'}
+              </button>
+            )}
+            <button onClick={newCall}
+              className="text-sm font-black px-4 py-2 rounded-2xl transition-all hover:scale-105"
+              style={{ background: 'rgba(123,63,242,0.09)', color: '#7B3FF2' }}>
+              + New Call
+            </button>
+            <button onClick={() => { clearApiKey(); setHasKey(false) }}
+              className="text-xs font-semibold hover:opacity-60 transition-opacity"
+              style={{ color: 'var(--text-3)' }}>
+              Change key
+            </button>
+          </div>
         </div>
       </div>
 
@@ -337,8 +367,20 @@ export default function LiveAdvice() {
 
           {error && (
             <div className="rounded-2xl px-4 py-3 mb-4 text-sm font-semibold"
-              style={{ background: '#fef2f2', border: '1.5px solid #fecaca', color: '#dc2626' }}>
+              style={{ background: 'rgba(239,68,68,0.10)', border: '1.5px solid rgba(239,68,68,0.25)', color: '#dc2626' }}>
               {error} — Check your API key or try again.
+            </div>
+          )}
+
+          {(summary || isSummarizing) && (
+            <div className="rounded-2xl p-4 mb-4" style={{ background: 'rgba(16,185,129,0.08)', border: '1.5px solid rgba(16,185,129,0.20)' }}>
+              <div className="text-[10px] font-black uppercase tracking-widest mb-2" style={{ color: '#10b981' }}>Session Summary</div>
+              {isSummarizing && !summary && (
+                <div className="flex items-center gap-2 text-sm font-semibold" style={{ color: 'var(--text-2)' }}>
+                  <span>Summarizing</span><BounceDots color="#10b981" />
+                </div>
+              )}
+              {summary && <p className="text-sm leading-relaxed whitespace-pre-line font-semibold" style={{ color: 'var(--text)' }}>{summary}</p>}
             </div>
           )}
 
@@ -360,8 +402,8 @@ export default function LiveAdvice() {
               placeholder="What's happening on your call right now? (e.g. 'Customer just found out claim was denied and is escalating')"
               rows={2}
               disabled={isLoading}
-              className="flex-1 rounded-2xl px-4 py-3 text-sm placeholder-gray-400 focus:outline-none resize-none disabled:opacity-50 transition-all font-semibold" style={{ color: 'var(--text)' }}
-              style={{ border: '1.5px solid var(--border)', background: 'var(--input-bg)' }}
+              className="flex-1 rounded-2xl px-4 py-3 text-sm placeholder-gray-400 focus:outline-none resize-none disabled:opacity-50 transition-all font-semibold"
+              style={{ color: 'var(--text)', border: '1.5px solid var(--border)', background: 'var(--input-bg)' }}
             />
             <button
               onClick={() => sendMessage(input)}

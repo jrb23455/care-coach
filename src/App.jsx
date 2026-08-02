@@ -5,19 +5,27 @@ import Home from './pages/Home'
 import HelpCenter from './pages/HelpCenter'
 import Training from './pages/Training'
 import LiveAdvice from './pages/LiveAdvice'
+import Onboarding from './components/Onboarding'
 import { useTheme } from './hooks/useTheme'
 
 export default function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const { dark, toggle } = useTheme()
   const mainRef = useRef(null)
+  const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem('carecoach_onboarded'))
 
   useEffect(() => {
     mainRef.current?.scrollTo(0, 0)
   }, [currentPage])
 
+  function handleOnboardingDone(chosenPillar) {
+    setShowOnboarding(false)
+    if (chosenPillar) setCurrentPage('training')
+  }
+
   return (
     <div className="h-screen flex overflow-hidden" style={{ background: 'var(--bg)' }}>
+      {showOnboarding && <Onboarding onDone={handleOnboardingDone} />}
       <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
       <div className="flex-1 flex flex-col min-w-0">
         <TopBar currentPage={currentPage} setCurrentPage={setCurrentPage} dark={dark} onToggleTheme={toggle} />

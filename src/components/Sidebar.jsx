@@ -74,6 +74,7 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
             <button
               key={page}
               onClick={() => setCurrentPage(page)}
+              aria-current={active ? 'page' : undefined}
               className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-2xl text-sm font-bold transition-all text-left ${
                 active
                   ? 'text-white shadow-lg'
@@ -139,7 +140,6 @@ export default function Sidebar({ currentPage, setCurrentPage }) {
           <div className="text-xs text-white font-bold truncate">Agent</div>
           <div className="text-[10px] text-gray-500 truncate">Insurance Sales</div>
         </div>
-        <button className="ml-auto text-gray-600 hover:text-gray-300 text-sm shrink-0">🔔</button>
       </div>
     </div>
   )

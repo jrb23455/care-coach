@@ -1,14 +1,16 @@
-import { useState } from 'react'
-import { useProgress } from '../hooks/useProgress'
+import { useState, useMemo } from 'react'
+import { useProgress, computeBadges } from '../hooks/useProgress'
 import { practiceScenarios } from '../data/practiceScenarios'
 import CoraRobot from '../components/CoraRobot'
 
 const PILLAR_META = [
-  { key: 'understand',  icon: '🎧', title: 'Understand',     color: '#7B3FF2', bg: 'rgba(123,63,242,0.10)' },
-  { key: 'deescalate', icon: '🛡️', title: 'De-escalate',    color: '#ec4899', bg: 'rgba(236,72,153,0.10)'  },
-  { key: 'respond',    icon: '👥', title: 'Respond',         color: '#f59e0b', bg: 'rgba(245,158,11,0.10)'  },
-  { key: 'resolve',    icon: '🏆', title: 'Resolve & Close', color: '#10b981', bg: 'rgba(16,185,129,0.10)'  },
+  { key: 'understand',  icon: '🎧', title: 'Understand',     color: '#7B3FF2', bg: 'rgba(123,63,242,0.10)', label: 'Understand' },
+  { key: 'deescalate', icon: '🛡️', title: 'De-escalate',    color: '#ec4899', bg: 'rgba(236,72,153,0.10)', label: 'De-escalate' },
+  { key: 'respond',    icon: '👥', title: 'Respond',         color: '#f59e0b', bg: 'rgba(245,158,11,0.10)', label: 'Respond' },
+  { key: 'resolve',    icon: '🏆', title: 'Resolve & Close', color: '#10b981', bg: 'rgba(16,185,129,0.10)', label: 'Resolve' },
 ]
+
+const DIFFICULTY_LABEL = { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced' }
 
 const STAT_CARDS = [
   { label: 'Scenarios', sub: 'completed',      icon: '🎯', grad: 'linear-gradient(135deg, #7B3FF2, #a855f7)', shadow: 'rgba(123,63,242,0.35)' },
@@ -25,19 +27,133 @@ const CORA_TIPS = [
   { icon: '💬', tip: 'Mirror the customer\'s own words back — it shows you were truly listening.', tag: 'Active Listening' },
 ]
 
-const RECOMMENDED = [
-  { type: 'SCENARIO',  typeColor: '#7B3FF2', bg: 'rgba(123,63,242,0.08)', title: 'Handling Objections That Turn Rude', icon: '🎧', meta: '8 min',      page: 'training' },
-  { type: 'TOOL',      typeColor: '#06b6d4', bg: 'rgba(6,182,212,0.08)',   title: 'De-escalation Phrase Bank',          icon: '📝', meta: 'Reference',  page: 'help' },
-  { type: 'VIDEO',     typeColor: '#f59e0b', bg: 'rgba(245,158,11,0.08)',  title: "Staying Calm When They Aren't",       icon: '▶️', meta: '6 min',      page: 'training' },
-  { type: 'QUICK TIP', typeColor: '#ec4899', bg: 'rgba(236,72,153,0.08)', title: '3 Things to Never Say',              icon: '💡', meta: '2 min read', page: 'help' },
+const NEVER_SAY_TIPS = [
+  {
+    phrase: 'Calm down',
+    why: 'It invalidates their emotion and almost always escalates the situation. The customer hears: "Your reaction is wrong." It never works.',
+    instead: '"I hear how frustrated you are — let me help you get this sorted out right now."',
+  },
+  {
+    phrase: "That's our policy",
+    why: 'Sounds like "tough luck." It closes the conversation and removes any empathy. Customers don\'t care about your policy — they care about their problem.',
+    instead: '"Here\'s what I\'m able to do for you right now..." and lead with what you CAN do.',
+  },
+  {
+    phrase: "There's nothing I can do",
+    why: 'Almost never true, and it ends the conversation entirely. Even if something is outside your authority, you can always escalate or document.',
+    instead: '"What I\'m not able to do is [X], but here\'s what I can do: [Y]. Let me also flag this to my market leader for you."',
+  },
 ]
 
+const DE_ESC_PHRASES = [
+  { situation: "When they're yelling", phrase: '"I hear how frustrated you are, and I want to make sure I get this right for you."', why: 'Acknowledges without escalating. Lower your voice as you say it.' },
+  { situation: 'To acknowledge the issue', phrase: '"That\'s not the experience we want you to have, and I\'m sorry it happened."', why: 'Takes ownership without admitting legal fault.' },
+  { situation: 'To buy time', phrase: '"I want to make sure I fully understand — let me pull up your account."', why: 'Gives you 30 seconds and signals you\'re taking it seriously.' },
+  { situation: 'To set limits firmly', phrase: '"I want to help you resolve this, and I also need us to be able to have that conversation."', why: 'Sets a boundary without being confrontational.' },
+  { situation: 'On market leader requests', phrase: '"I can\'t bring my market leader onto the call, but I can commit to having them call you back by [time]."', why: 'Honest about the process. Specificity is the key.' },
+  { situation: 'When they threaten to cancel', phrase: '"You\'ve been with us a long time — before you decide, I\'d like to understand what\'s driving this."', why: 'Leads with the relationship. Doesn\'t panic or immediately offer discounts.' },
+]
+
+const RECOMMENDED = [
+  {
+    type: 'SCENARIO', typeColor: '#7B3FF2', bg: 'rgba(123,63,242,0.08)',
+    title: 'Handling Objections That Turn Rude', icon: '🎧', meta: '8 min',
+    page: 'training',
+  },
+  {
+    type: 'TOOL', typeColor: '#06b6d4', bg: 'rgba(6,182,212,0.08)',
+    title: 'De-escalation Phrase Bank', icon: '📝', meta: 'Reference',
+    modal: { title: 'De-escalation Phrase Bank', type: 'phrases', phrases: DE_ESC_PHRASES },
+  },
+  {
+    type: 'VIDEO', typeColor: '#f59e0b', bg: 'rgba(245,158,11,0.08)',
+    title: 'How to Handle Angry Customers', icon: '▶️', meta: '~10 min',
+    modal: { title: 'How to Handle Angry Customers', type: 'video', videoUrl: 'https://www.youtube.com/embed/ZXH_HTEpqOU' },
+  },
+  {
+    type: 'QUICK TIP', typeColor: '#ec4899', bg: 'rgba(236,72,153,0.08)',
+    title: '3 Things to Never Say', icon: '💡', meta: '2 min read',
+    modal: { title: '3 Things to Never Say to an Angry Customer', type: 'tips', tips: NEVER_SAY_TIPS },
+  },
+]
+
+function getDailyChallenge() {
+  const dayNum = Math.floor(Date.now() / 86_400_000)
+  return practiceScenarios[dayNum % practiceScenarios.length]
+}
+
+function HomeContentModal({ item, onClose }) {
+  if (!item?.modal) return null
+  const { modal, type, typeColor } = item
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
+      <div className="relative rounded-3xl shadow-2xl w-full max-w-lg max-h-[85vh] overflow-hidden flex flex-col"
+        style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }} onClick={e => e.stopPropagation()}>
+        <div className="flex items-center justify-between px-6 py-4 shrink-0" style={{ borderBottom: '1.5px solid var(--border)' }}>
+          <div>
+            <span className="text-[10px] font-black uppercase tracking-widest" style={{ color: typeColor }}>{type}</span>
+            <h2 className="font-black text-base" style={{ color: 'var(--text)' }}>{modal.title}</h2>
+          </div>
+          <button onClick={onClose} className="text-2xl leading-none ml-4 hover:opacity-60 transition-opacity" style={{ color: 'var(--text-3)' }}>×</button>
+        </div>
+        <div className="overflow-y-auto flex-1 px-6 py-5">
+          {modal.type === 'video' && (
+            <div className="rounded-2xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+              <iframe
+                src={modal.videoUrl}
+                className="w-full h-full"
+                style={{ minHeight: 280 }}
+                allowFullScreen
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              />
+            </div>
+          )}
+          {modal.type === 'tips' && modal.tips.map((tip, i) => (
+            <div key={i} className="mb-4 rounded-2xl p-4" style={{ background: 'var(--bg)', border: '1.5px solid var(--border)' }}>
+              <div className="flex items-start gap-2 mb-2">
+                <span className="w-6 h-6 rounded-full text-white text-xs font-black flex items-center justify-center shrink-0 mt-0.5"
+                  style={{ background: '#ec4899' }}>✕</span>
+                <span className="font-black text-sm leading-snug" style={{ color: '#ec4899' }}>"{tip.phrase}"</span>
+              </div>
+              <p className="text-sm leading-relaxed pl-8" style={{ color: 'var(--text-2)' }}>{tip.why}</p>
+              {tip.instead && (
+                <div className="mt-3 pl-8 pt-2" style={{ borderTop: '1px solid var(--border)' }}>
+                  <span className="text-xs font-black text-green-500">Say instead: </span>
+                  <span className="text-xs italic leading-relaxed" style={{ color: 'var(--text)' }}>{tip.instead}</span>
+                </div>
+              )}
+            </div>
+          ))}
+          {modal.type === 'phrases' && modal.phrases.map((p, i) => (
+            <div key={i} className="mb-3 rounded-2xl overflow-hidden" style={{ border: '1.5px solid var(--border)' }}>
+              <div className="px-4 py-2" style={{ background: 'rgba(6,182,212,0.12)' }}>
+                <p className="text-xs font-black uppercase tracking-wide" style={{ color: '#06b6d4' }}>{p.situation}</p>
+              </div>
+              <div className="px-4 py-3" style={{ background: 'var(--bg)' }}>
+                <p className="text-sm font-bold italic mb-1.5" style={{ color: 'var(--text)' }}>{p.phrase}</p>
+                <p className="text-xs" style={{ color: 'var(--text-2)' }}>{p.why}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function Home({ setCurrentPage }) {
-  const { prog, pillarProgress, xpLevel } = useProgress()
+  const { prog, pillarProgress, xpLevel, xpInLevel } = useProgress()
   const totalDone = Object.keys(prog.completed).length
   const totalScenarios = practiceScenarios.length
   const [tipIdx, setTipIdx] = useState(0)
+  const [openCard, setOpenCard] = useState(null)
   const tip = CORA_TIPS[tipIdx]
+
+  const badges = useMemo(() => computeBadges(prog, practiceScenarios), [prog])
+  const dailyChallenge = getDailyChallenge()
+  const dailyDone = prog.completed[dailyChallenge?.id]
+  const dailyPillar = PILLAR_META.find(m => m.key === dailyChallenge?.pillar)
 
   const statValues = [
     `${totalDone}/${totalScenarios}`,
@@ -45,6 +161,11 @@ export default function Home({ setCurrentPage }) {
     xpLevel,
     prog.streak > 0 ? `${prog.streak}` : '—',
   ]
+
+  function handleRecommendedClick(r) {
+    if (r.modal) setOpenCard(r)
+    else if (r.page) setCurrentPage(r.page)
+  }
 
   return (
     <div className="p-6 max-w-[1200px] mx-auto" style={{ background: 'var(--bg)', minHeight: '100%' }}>
@@ -66,7 +187,7 @@ export default function Home({ setCurrentPage }) {
       </div>
 
       {/* Stats row */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-5">
         {STAT_CARDS.map((s, i) => (
           <div key={s.label}
             className="rounded-3xl px-5 py-4 flex items-center gap-3 transition-transform hover:scale-[1.02]"
@@ -82,11 +203,43 @@ export default function Home({ setCurrentPage }) {
         ))}
       </div>
 
+      {/* Daily Challenge */}
+      {dailyChallenge && (
+        <div className="rounded-3xl p-5 flex items-center justify-between mb-5"
+          style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
+          <div>
+            <div className="text-[10px] font-black uppercase tracking-widest mb-1" style={{ color: '#7B3FF2' }}>
+              Daily Challenge
+            </div>
+            <h3 className="font-black text-base leading-snug" style={{ color: 'var(--text)' }}>{dailyChallenge.title}</h3>
+            <p className="text-xs mt-0.5 font-semibold" style={{ color: 'var(--text-2)' }}>
+              {dailyPillar?.label} · {DIFFICULTY_LABEL[dailyChallenge.difficulty]} · +{dailyChallenge.xp} XP
+            </p>
+          </div>
+          {dailyDone ? (
+            <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl font-black text-sm shrink-0"
+              style={{ background: 'rgba(16,185,129,0.12)', color: '#10b981' }}>
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M13.5 2.5l-7 7-3-3L2 8l4.5 4.5 8.5-8.5z"/></svg>
+              Done! ({dailyDone.score}pts)
+            </div>
+          ) : (
+            <button onClick={() => {
+              sessionStorage.setItem('training_auto_scenario', dailyChallenge.id)
+              setCurrentPage('training')
+            }}
+              className="text-white text-sm font-black px-5 py-2.5 rounded-2xl transition-all hover:scale-105 shrink-0"
+              style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)', boxShadow: '0 4px 12px rgba(123,63,242,0.30)' }}>
+              Start →
+            </button>
+          )}
+        </div>
+      )}
+
       {/* Main grid */}
-      <div className="grid grid-cols-3 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
 
         {/* Left col */}
-        <div className="col-span-2 space-y-5">
+        <div className="lg:col-span-2 space-y-5">
 
           {/* Progress pillars */}
           <div className="rounded-3xl shadow-sm p-5" style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
@@ -94,7 +247,7 @@ export default function Home({ setCurrentPage }) {
               <h2 className="font-black text-sm" style={{ color: 'var(--text)' }}>Training Progress</h2>
               <button onClick={() => setCurrentPage('training')} className="text-xs font-black hover:underline" style={{ color: '#7B3FF2' }}>Continue →</button>
             </div>
-            <div className="grid grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {PILLAR_META.map(m => {
                 const { done, total } = pillarProgress(m.key, practiceScenarios)
                 const pct = total > 0 ? Math.round((done / total) * 100) : 0
@@ -149,7 +302,7 @@ export default function Home({ setCurrentPage }) {
             </div>
             <div className="grid grid-cols-2 gap-3">
               {RECOMMENDED.map((r, i) => (
-                <button key={i} onClick={() => setCurrentPage(r.page)}
+                <button key={i} onClick={() => handleRecommendedClick(r)}
                   className="rounded-2xl p-4 text-left hover:scale-[1.02] transition-all flex items-start gap-3"
                   style={{ background: r.bg }}>
                   <div className="w-9 h-9 rounded-xl flex items-center justify-center text-lg shrink-0 shadow-sm" style={{ background: 'var(--card)' }}>{r.icon}</div>
@@ -213,6 +366,32 @@ export default function Home({ setCurrentPage }) {
           </div>
         </div>
       </div>
+
+      {/* Achievements */}
+      <div className="mt-5 rounded-3xl shadow-sm p-5" style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
+        <h2 className="font-black text-sm mb-4" style={{ color: 'var(--text)' }}>Achievements</h2>
+        <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
+          {badges.map(b => (
+            <div key={b.id} title={b.desc}
+              className="flex flex-col items-center gap-1 rounded-2xl p-2 transition-all cursor-default"
+              style={{ background: b.earned ? 'rgba(123,63,242,0.12)' : 'var(--bg)', opacity: b.earned ? 1 : 0.35 }}>
+              <span className="text-2xl">{b.icon}</span>
+              <span className="text-[10px] font-black text-center leading-snug" style={{ color: b.earned ? '#7B3FF2' : 'var(--text-3)' }}>{b.label}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* XP bar */}
+      <div className="mt-3 px-2 flex items-center gap-3">
+        <span className="text-xs font-black" style={{ color: 'var(--text-3)' }}>Lv {xpLevel}</span>
+        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: 'rgba(123,63,242,0.12)' }}>
+          <div className="h-full rounded-full transition-all" style={{ width: `${xpInLevel}%`, background: 'linear-gradient(90deg,#7B3FF2,#c084fc)' }} />
+        </div>
+        <span className="text-xs font-black" style={{ color: 'var(--text-3)' }}>{xpInLevel}/100 XP</span>
+      </div>
+
+      {openCard && <HomeContentModal item={openCard} onClose={() => setOpenCard(null)} />}
     </div>
   )
 }
