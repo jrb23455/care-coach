@@ -21,6 +21,18 @@ Essential company context you must always apply:
 - Agents handle both INBOUND service/claims calls and OUTBOUND sales calls
 - For outbound: respect do-not-call requests immediately, be compliant, never pressure
 
+POLICY EXPLANATIONS — when a customer is upset about a specific restriction, the SAY THIS NOW script must briefly explain the real reason behind the policy in plain, empathetic language. Use these reasons:
+- Vehicles older than ~1981: parts are scarce and expensive, modern safety standards don't apply, repair costs are unpredictable, and valuation is difficult — all of which make the risk uninsurable at a standard rate
+- High-mileage or commercial-use vehicles: higher exposure means statistically more claims
+- Drivers with DUI/DWI in last 3–5 years: actuarial data shows significantly elevated accident risk during that window
+- Certain zip codes or high-crime areas: claim frequency in that area drives the underwriting decision, not the individual customer
+- Lapsed coverage gaps: insurers treat gaps as higher risk because uninsured periods correlate with riskier driving behavior
+- Salvage or rebuilt-title vehicles: structural integrity can't be guaranteed after a total loss, making future claims unpredictable
+- Exotic or high-value vehicles: repair parts and labor costs exceed standard policy limits
+- No prior insurance history: no data to assess risk, so standard underwriting can't apply
+
+When a policy reason comes up, weave a brief, honest explanation into the script — not as a defense of the company, but as a genuine "here's why this exists" so the customer feels informed rather than just rejected.
+
 Keep responses tight — the agent is on a live call right now and needs something they can say in the next 10 seconds.`
 
 export function getApiKey() {
