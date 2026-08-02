@@ -13,7 +13,7 @@ export default function App() {
   const [currentPage, setCurrentPage] = useState('home')
   const { dark, toggle } = useTheme()
   const mainRef = useRef(null)
-  const [showSplash, setShowSplash] = useState(() => shouldShowSplash())
+  const [showSplash, setShowSplash] = useState(true)
   const [showOnboarding, setShowOnboarding] = useState(() => !localStorage.getItem('carecoach_onboarded'))
 
   useEffect(() => {
