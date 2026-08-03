@@ -38,9 +38,8 @@ export function setApiKey() {}
 export function clearApiKey() {}
 
 export async function askCora(messages, onChunk) {
-  // Only send the last 6 messages (3 exchanges) to keep latency low
   const trimmed = messages.slice(-6)
-  return streamClaude({ system: SYSTEM_PROMPT, messages: trimmed, onChunk, maxTokens: 350 })
+  return streamClaude({ system: SYSTEM_PROMPT, messages: trimmed, onChunk, maxTokens: 550 })
 }
 
 export async function streamClaude({ system, messages, onChunk, maxTokens = 600 }) {
@@ -68,15 +67,15 @@ export async function streamClaude({ system, messages, onChunk, maxTokens = 600 
   const reader = response.body.getReader()
   const decoder = new TextDecoder()
   let fullText = ''
+  let buffer = ''
 
-  while (true) {
-    const { done, value } = await reader.read()
-    if (done) break
-    const raw = decoder.decode(value, { stream: true })
-    for (const line of raw.split('\n')) {
+  function processBuffer() {
+    const lines = buffer.split('\n')
+    buffer = lines.pop() // keep any incomplete last line
+    for (const line of lines) {
       if (!line.startsWith('data: ')) continue
       const data = line.slice(6).trim()
-      if (!data || data === '[DONE]') continue
+      if (!data) continue
       try {
         const parsed = JSON.parse(data)
         if (parsed.type === 'content_block_delta' && parsed.delta?.type === 'text_delta') {
@@ -86,6 +85,16 @@ export async function streamClaude({ system, messages, onChunk, maxTokens = 600 
       } catch {}
     }
   }
+
+  while (true) {
+    const { done, value } = await reader.read()
+    if (done) break
+    buffer += decoder.decode(value, { stream: true })
+    processBuffer()
+  }
+  // flush any remaining buffered line
+  buffer += '\n'
+  processBuffer()
 
   return fullText
 }
