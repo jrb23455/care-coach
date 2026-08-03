@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
-import { getApiKey, setApiKey, clearApiKey, askCora, summarizeSession } from '../services/claudeApi'
+import { askCora, summarizeSession } from '../services/claudeApi'
 import CoraRobot from '../components/CoraRobot'
 
 const QUICK_SITUATIONS = [
@@ -129,74 +129,7 @@ function AdviceBlock({ message, isStreaming, onFollowUp }) {
   )
 }
 
-function ApiKeySetup({ onSave }) {
-  const [key, setKey] = useState('')
-  const [error, setError] = useState('')
-
-  function handleSave() {
-    const trimmed = key.trim()
-    if (!trimmed) { setError('Please enter your API key.'); return }
-    if (!trimmed.startsWith('sk-ant-')) {
-      setError('Anthropic API keys start with "sk-ant-" — double-check and try again.')
-      return
-    }
-    setApiKey(trimmed)
-    onSave()
-  }
-
-  return (
-    <div className="flex-1 flex items-center justify-center px-6" style={{ background: 'var(--bg)' }}>
-      <div className="max-w-md w-full">
-        <div className="text-center mb-8">
-          <div className="flex justify-center mb-4">
-            <CoraRobot size={110} pose="wave" />
-          </div>
-          <h1 className="text-2xl font-black mb-2" style={{ color: 'var(--text)' }}>Connect Cora's Brain</h1>
-          <p className="text-sm leading-relaxed font-semibold" style={{ color: 'var(--text-2)' }}>
-            Enter your Anthropic API key to unlock real-time coaching during live calls.
-            Stored in your browser only — never sent anywhere except directly to Anthropic.
-          </p>
-        </div>
-
-        <div className="rounded-3xl shadow-sm p-6" style={{ background: 'var(--card)', border: '1.5px solid var(--border)' }}>
-          <label className="block text-sm font-black mb-2" style={{ color: 'var(--text)' }}>Anthropic API Key</label>
-          <input
-            type="password"
-            value={key}
-            onChange={e => { setKey(e.target.value); setError('') }}
-            onKeyDown={e => e.key === 'Enter' && handleSave()}
-            placeholder="sk-ant-api03-..."
-            autoFocus
-            className="w-full border rounded-2xl px-4 py-3 text-sm font-mono focus:outline-none transition-all"
-            style={{ borderColor: error ? '#ef4444' : 'var(--border)', boxShadow: 'none' }}
-          />
-          {error && <p className="text-red-500 text-xs mt-2 font-bold">{error}</p>}
-
-          <button
-            onClick={handleSave}
-            disabled={!key.trim()}
-            className="mt-4 w-full text-white font-black py-3 rounded-2xl transition-all hover:scale-[1.02] disabled:opacity-40 disabled:cursor-not-allowed shadow-lg"
-            style={{ background: 'linear-gradient(135deg, #7B3FF2, #a855f7)', boxShadow: '0 4px 16px rgba(123,63,242,0.35)' }}
-          >
-            Connect &amp; Start Coaching
-          </button>
-
-          <p className="text-xs text-center mt-4 font-semibold" style={{ color: 'var(--text-3)' }}>
-            Get a key at{' '}
-            <a href="https://console.anthropic.com" target="_blank" rel="noopener noreferrer"
-              className="font-mono hover:underline" style={{ color: '#7B3FF2' }}>
-              console.anthropic.com
-            </a>
-            {' '}· Stored in your browser only
-          </p>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default function LiveAdvice() {
-  const [hasKey, setHasKey]           = useState(() => !!getApiKey())
   const [messages, setMessages]       = useState([])
   const [input, setInput]             = useState('')
   const [isLoading, setIsLoading]     = useState(false)
@@ -229,11 +162,7 @@ export default function LiveAdvice() {
       setMessages(prev => [...prev, { role: 'assistant', content: finalText }])
       setStreamingText('')
     } catch (err) {
-      if (err.message === 'NO_KEY') {
-        setHasKey(false)
-      } else {
-        setError(err.message)
-      }
+      setError(err.message)
     } finally {
       setIsLoading(false)
       setTimeout(() => inputRef.current?.focus(), 50)
@@ -248,7 +177,7 @@ export default function LiveAdvice() {
     try {
       await summarizeSession(apiMsgs, chunk => setSummary(chunk))
     } catch {
-      setSummary('Could not generate summary — check your API key.')
+      setSummary('Could not generate summary.')
     }
     setIsSummarizing(false)
   }
@@ -261,8 +190,6 @@ export default function LiveAdvice() {
     setSummary('')
     setTimeout(() => inputRef.current?.focus(), 50)
   }
-
-  if (!hasKey) return <ApiKeySetup onSave={() => setHasKey(true)} />
 
   const lastIsAssistant = messages.length > 0 && messages[messages.length - 1].role === 'assistant'
 
@@ -294,11 +221,6 @@ export default function LiveAdvice() {
               className="text-sm font-black px-4 py-2 rounded-2xl transition-all hover:scale-105"
               style={{ background: 'rgba(123,63,242,0.09)', color: '#7B3FF2' }}>
               + New Call
-            </button>
-            <button onClick={() => { clearApiKey(); setHasKey(false) }}
-              className="text-xs font-semibold hover:opacity-60 transition-opacity"
-              style={{ color: 'var(--text-3)' }}>
-              Change key
             </button>
           </div>
         </div>

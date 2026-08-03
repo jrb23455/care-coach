@@ -1,5 +1,3 @@
-const API_KEY_STORAGE = 'cora_api_key'
-
 const SYSTEM_PROMPT = `You are Cora, a live AI call coach for insurance sales agents during active customer calls.
 
 When an agent describes what's happening, respond with EXACTLY this format — use these exact headers, on their own lines:
@@ -35,21 +33,9 @@ When a policy reason comes up, weave a brief, honest explanation into the script
 
 Keep responses tight — the agent is on a live call right now and needs something they can say in the next 10 seconds.`
 
-export function getApiKey() {
-  return localStorage.getItem(API_KEY_STORAGE) || import.meta.env.VITE_ANTHROPIC_API_KEY || ''
-}
-
-export function setApiKey(key) {
-  if (key) {
-    localStorage.setItem(API_KEY_STORAGE, key.trim())
-  } else {
-    localStorage.removeItem(API_KEY_STORAGE)
-  }
-}
-
-export function clearApiKey() {
-  localStorage.removeItem(API_KEY_STORAGE)
-}
+export function getApiKey() { return 'server' }
+export function setApiKey() {}
+export function clearApiKey() {}
 
 export async function askCora(messages, onChunk) {
   // Only send the last 6 messages (3 exchanges) to keep latency low
@@ -58,17 +44,9 @@ export async function askCora(messages, onChunk) {
 }
 
 export async function streamClaude({ system, messages, onChunk, maxTokens = 600 }) {
-  const key = getApiKey().replace(/[^\x20-\x7E]/g, '') // strip non-printable / non-ASCII
-  if (!key) throw new Error('NO_KEY')
-
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
+  const response = await fetch('/api/claude', {
     method: 'POST',
-    headers: {
-      'x-api-key': key,
-      'anthropic-version': '2023-06-01',
-      'anthropic-dangerous-direct-browser-access': 'true',
-      'content-type': 'application/json',
-    },
+    headers: { 'content-type': 'application/json' },
     body: JSON.stringify({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: maxTokens,
