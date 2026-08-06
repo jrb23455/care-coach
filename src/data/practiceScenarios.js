@@ -61,6 +61,19 @@ export const practiceScenarios = [
     expertResponse: "I hear what you're saying, and I understand this isn't just about the money — this affected your family's stability. That's on us, and I'm sorry. I'm initiating the reversal right now. I also want to ask about the overdraft fee — I can't reverse your bank's fee directly, but I can give you a formal letter documenting our error, which many banks will waive the fee for. Would that help?",
   },
 
+  {
+    id: 'understand-6', pillar: 'understand', title: 'Coverage Confusion',
+    difficulty: 'beginner', xp: 25,
+    customerLine: "I don't even understand what half this coverage means. Why am I paying for things I don't know anything about?",
+    options: [
+      { text: "That's completely fair — and if it hasn't been explained clearly, that's on us. Let me walk you through each part of your policy in plain terms so you know exactly what you're paying for and why it matters.", score: 92, feedback: "You took ownership of the communication gap instead of making them feel uninformed. 'That's on us' is the key phrase — it shifts blame off the customer and builds trust immediately." },
+      { text: "No problem — I can explain your coverage. Which part is confusing you?", score: 68, feedback: "Good opening, but 'which part is confusing you?' puts the burden on them to identify what they don't know. Offer to walk through everything proactively instead." },
+      { text: "Let me pull up your policy and go over the details with you.", score: 55, feedback: "Action-oriented, but you skipped acknowledging their frustration at feeling uninformed. Validate first, then act." },
+      { text: "These are all standard coverages that most policies include.", score: 5, feedback: "'Standard' completely dismisses their question and makes them feel foolish for asking. Never normalize a customer's confusion — address it." },
+    ],
+    expertResponse: "That's a fair question — and if it hasn't been explained clearly, that's on us, not you. Let me walk you through each part of your policy in plain language so you know exactly what you're covered for and why each piece is there. Nothing in here should be a mystery.",
+  },
+
   // ── DE-ESCALATE ──────────────────────────────────────────────────────
   {
     id: 'deescalate-1', pillar: 'deescalate', title: 'The Yeller',
@@ -121,6 +134,19 @@ export const practiceScenarios = [
       { text: "I'm very sorry for your loss. I want to help make this as simple as possible for you. Let's go through everything together, and if you need to take a break at any point, that's completely fine.", score: 90, feedback: "Very strong empathy and flexibility. The 'take a break' offer is a nice human touch. Loses a couple points only because 'nothing is urgent right now' would be even more reassuring." },
     ],
     expertResponse: "I'm so deeply sorry for your loss. Please know that none of this is urgent — I want you to take whatever time you need. When you're ready, I'll walk you through everything from the beginning, as slowly as you'd like, so you understand exactly what each policy means and what, if anything, needs your attention right now.",
+  },
+
+  {
+    id: 'deescalate-6', pillar: 'deescalate', title: 'Loss of Trust',
+    difficulty: 'advanced', xp: 45,
+    customerLine: "I don't trust anything you're telling me. The last person told me one thing, you're telling me something completely different.",
+    options: [
+      { text: "That's fair — if you've gotten different answers, you have every reason to be skeptical. I'm not going to ask you to just take my word for it. Let me walk you through exactly where I'm getting this so you can see it yourself.", score: 95, feedback: "You validated the distrust as rational, not an overreaction. 'So you can see it for yourself' transfers verification power to the customer — that's the move that actually rebuilds trust." },
+      { text: "I understand your concern. Let me walk you through everything step by step so you can see exactly what's happening.", score: 72, feedback: "Solid, but 'I understand your concern' feels canned here. Lead with something that specifically acknowledges they got conflicting information, not a generic opener." },
+      { text: "I assure you I'm giving you the correct information.", score: 8, feedback: "The previous agent probably said the same thing. 'I assure you' is just a stronger assertion of the thing they already don't believe. You can't talk your way into trust — you have to show it." },
+      { text: "I'm sorry about the confusion. Would you like me to get a supervisor to confirm what I'm telling you?", score: 48, feedback: "Volunteering a supervisor might signal you're not confident in your own information. If you know you're right, own it and prove it — don't outsource the credibility." },
+    ],
+    expertResponse: "If you got two different answers, you have every reason not to trust what I'm about to say. I'm not going to ask you to. Let me walk you through exactly where this information comes from so you can see it directly — not just take my word for it. What specifically did the last person tell you?",
   },
 
   // ── RESPOND ──────────────────────────────────────────────────────────
@@ -185,6 +211,31 @@ export const practiceScenarios = [
     expertResponse: "Filing a complaint is absolutely your right, and I respect that. I also want you to know: I want to fix this today too. So let's focus on that. Tell me — what would 'resolved' look like for you, specifically? Let's see if we can get there in the next few minutes.",
   },
 
+  {
+    id: 'respond-6', pillar: 'respond', title: 'Price Objection',
+    difficulty: 'beginner', xp: 25,
+    customerLine: "This quote is way too expensive. I can get the same coverage cheaper somewhere else.",
+    options: [
+      { text: "I completely understand — price is really important. Before you decide, let me take a closer look and see if there are any discounts or coverage adjustments that can bring this down while still protecting what matters most to you.", score: 88, feedback: "You validated the concern, didn't get defensive about the competitor mention, and offered a concrete next step. Solid." },
+      { text: "Our rates are competitive. Can I ask what you were quoted elsewhere?", score: 52, feedback: "Asking for the competitor quote is smart, but leading with 'our rates are competitive' is defensive. Lead with understanding their concern, not defending your price." },
+      { text: "I understand. We do offer payment plans if that would help.", score: 30, feedback: "Payment plans don't address a pricing objection — they just spread out a price they've already said is too high. Address the total cost first." },
+      { text: "I hear you. Let me look at whether there are discounts or adjustments that bring this down — and also make sure the coverage you saw elsewhere is actually the same protection.", score: 90, feedback: "Strong: you validated, offered to find savings, and planted a seed that competitor coverage may not be equivalent — without being defensive about it." },
+    ],
+    expertResponse: "I completely understand — price matters, and I'd want the same thing. Let's take a closer look together. There may be discounts or coverage adjustments that bring this down while still protecting what's important to you. What's your biggest priority in the policy?",
+  },
+  {
+    id: 'respond-7', pillar: 'respond', title: "I'll Think About It",
+    difficulty: 'intermediate', xp: 35,
+    customerLine: "I appreciate it, but I think I'm going to think about it and maybe call back.",
+    options: [
+      { text: "Absolutely — I respect that. Before you go, is there anything specific holding you back that I can help clarify or adjust? Sometimes 'I'll think about it' means there's a question I haven't answered well enough.", score: 92, feedback: "You respected their decision, then opened the door non-pressuringly. The reframe — 'sometimes that means a question I haven't answered' — is insightful and never feels pushy." },
+      { text: "Of course! Take your time. You have my number if you have any questions.", score: 50, feedback: "Respectful but passive. You left a door open to never call back without checking what the real hesitation is." },
+      { text: "Just so you know, this rate may not be available if you call back later — these quotes are time-sensitive.", score: 0, feedback: "Never use artificial urgency. It erodes trust and often ends the conversation permanently. This is the fastest way to lose the sale and the relationship." },
+      { text: "That's completely fine. Before I let you go — is there a specific concern I haven't addressed? I'd rather answer it now than have you call back with something I could've covered today.", score: 88, feedback: "Good — focused on serving their decision, not reversing it. Slightly stronger if you named what 'thinking about it' often signals." },
+    ],
+    expertResponse: "Absolutely — I understand wanting to think it over. Before you go, can I ask: is there anything specific holding you back, or something I haven't answered well? I'd rather you leave with everything you need to make the right call than have you call back with something I could've cleared up right now.",
+  },
+
   // ── RESOLVE & CLOSE ──────────────────────────────────────────────────
   {
     id: 'resolve-1', pillar: 'resolve', title: 'Before You Hang Up',
@@ -245,5 +296,17 @@ export const practiceScenarios = [
       { text: "I'm really glad we worked through this. And I want you to know — this call is going to be noted. What you experienced shouldn't happen again, and I want to make sure it doesn't.", score: 88, feedback: "Strong accountability close. Noting the call signals real commitment to improvement, which is meaningful to someone who was about to leave." },
     ],
     expertResponse: "I'm really glad we got there. And honestly — thank you for giving us the chance to fix it instead of just canceling. That matters. I'm going to note this call so what you experienced is on record. You should never have to go through that again.",
+  },
+  {
+    id: 'resolve-6', pillar: 'resolve', title: 'The Follow-Up Promise',
+    difficulty: 'intermediate', xp: 35,
+    customerLine: "Every time I call, someone says they'll follow up and nobody ever does. Why should this time be any different?",
+    options: [
+      { text: "That's a completely fair question. Here's what I'm doing differently: I'm giving you a case number right now, a specific callback time, and my name on the notes. If you don't hear from us by then, call back and reference that case number — someone has to act on it.", score: 97, feedback: "Outstanding. You gave them three concrete things to hold you accountable to: case number, specific time, your name. This is what separates a promise from a commitment." },
+      { text: "I'm really sorry about that. I'm going to take ownership of this and make sure you get the follow-up you need.", score: 45, feedback: "Good intent but vague. Every previous agent probably said something similar. What specifically makes this time different? Give them something concrete to verify the promise was kept." },
+      { text: "I understand your concern. I'll put a note in your account and make sure someone follows up.", score: 28, feedback: "'A note in the account' is exactly what they've been promised before. You need to give them something they can use to verify it — a case number, specific time, or your direct extension." },
+      { text: "I can't speak to what happened before, but here's what I'm doing right now: I'm creating a case, scheduling a callback for a specific time, and putting my name on it. Write this down.", score: 88, feedback: "Strong accountability structure. Loses a few points for 'I can't speak to what happened before' — it slightly dodges ownership of the pattern they're describing." },
+    ],
+    expertResponse: "That's a fair question, and I'm not going to just promise the same thing again. Here's what I'm doing right now: I'm creating a case number, I'm scheduling a callback for [specific day and time], and I'm putting my name on the notes. Write this down: [case number]. If you don't hear from us by [time], call back and use that number — someone will have to account for it.",
   },
 ]
